@@ -1,0 +1,254 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>LifeShield | My Profile</title>-->
+<!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">-->
+<!--    <style>-->
+<!--        :root { &#45;&#45;primary: #1a3a5f; &#45;&#45;accent: #27ae60; &#45;&#45;light: #f4f7f9; }-->
+<!--        body { font-family: 'Segoe UI', sans-serif; background-color: var(&#45;&#45;light); margin: 0; padding: 20px; }-->
+<!--        .profile-container { max-width: 600px; margin: 50px auto; background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }-->
+<!--        .profile-header { background: var(&#45;&#45;primary); color: white; padding: 40px; text-align: center; }-->
+<!--        .profile-header i { font-size: 5rem; margin-bottom: 10px; color: var(&#45;&#45;accent); }-->
+<!--        .profile-body { padding: 30px; }-->
+<!--        .info-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #eee; }-->
+<!--        .info-label { font-weight: bold; color: var(&#45;&#45;primary); }-->
+<!--        .btn-back { display: block; text-align: center; margin-top: 20px; padding: 12px; background: var(&#45;&#45;primary); color: white; text-decoration: none; border-radius: 8px; }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--&lt;!&ndash;<div class="profile-container">&ndash;&gt;-->
+<!--&lt;!&ndash;    <div class="profile-header">&ndash;&gt;-->
+<!--&lt;!&ndash;        <i class="fas fa-user-circle"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;        <h2 th:text="${user.name}">User Name</h2>&ndash;&gt;-->
+<!--&lt;!&ndash;        <p>Verified Policyholder</p>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <div class="profile-body">&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="info-row">&ndash;&gt;-->
+<!--&lt;!&ndash;            <span class="info-label">Email Address</span>&ndash;&gt;-->
+<!--&lt;!&ndash;            <span th:text="${user.email}">user@example.com</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="info-row" th:if="${user.phone != null}">&ndash;&gt;-->
+<!--&lt;!&ndash;            <span class="info-label">Phone Number</span>&ndash;&gt;-->
+<!--&lt;!&ndash;            <span th:text="${user.phone}">+1 234 567 890</span>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <a href="/landingpage" class="btn-back">Back to Dashboard</a>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--<div class="container" style="max-width: 600px; margin: 50px auto;">-->
+<!--    <div class="card" style="padding: 40px; border-radius: 15px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">-->
+<!--        <i class="fas fa-user-shield" style="font-size: 4rem; color: var(&#45;&#45;primary); margin-bottom: 20px;"></i>-->
+<!--        <h2 th:text="${session.user.username}">User Name</h2>-->
+<!--        <p style="color: var(&#45;&#45;text-muted);">LifeShield Platinum Member</p>-->
+<!--        <hr style="border: 0; border-top: 1px solid var(&#45;&#45;border); margin: 20px 0;">-->
+<!--        <div style="text-align: left; padding: 0 20px;">-->
+<!--            <p><strong>Email:</strong> <span th:text="${session.user.email}">user@example.com</span></p>-->
+<!--            <p><strong>Member Since:</strong> 2025</p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LifeShield | My Profile</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a3a5f;
+            --secondary: #2c3e50;
+            --accent: #27ae60;
+            --light: #f4f7f9;
+            --white: #ffffff;
+            --border: #e1e8ed;
+            --text-muted: #666;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--light);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* --- Profile Card Container --- */
+        .profile-card {
+            background: var(--white);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* --- Top Decorative Header --- */
+        .profile-banner {
+            background: var(--primary);
+            height: 120px;
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 4px solid var(--white);
+        }
+
+        .profile-avatar i {
+            font-size: 3.5rem;
+            color: var(--primary);
+        }
+
+        /* --- Profile Content --- */
+        .profile-content {
+            padding: 70px 30px 30px;
+        }
+
+        .profile-content h2 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        .membership-badge {
+            display: inline-block;
+            background: #e8f5e9;
+            color: var(--accent);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        .info-section {
+            margin: 30px 0;
+            text-align: left;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-item i {
+            width: 35px;
+            height: 35px;
+            background: var(--light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .info-text label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .info-text span {
+            font-size: 1rem;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        /* --- Actions --- */
+        .btn-back {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-back:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+<div class="profile-card">
+    <div class="profile-banner">
+        <div class="profile-avatar">
+            <i class="fas fa-user-shield"></i>
+        </div>
+    </div>
+
+    <div class="profile-content">
+        <h2 th:text="${session.user.username}">User Name</h2>
+        <span class="membership-badge"><i class="fas fa-certificate"></i> Platinum Member</span>
+
+        <div class="info-section">
+            <div class="info-item">
+                <i class="fas fa-envelope"></i>
+                <div class="info-text">
+                    <label>Email Address</label>
+                    <span th:text="${session.user.email}">user@example.com</span>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <i class="fas fa-calendar-alt"></i>
+                <div class="info-text">
+                    <label>Member Since</label>
+                    <span>January 2025</span>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <i class="fas fa-shield-alt"></i>
+                <div class="info-text">
+                    <label>Account Status</label>
+                    <span style="color: var(--accent);">Active & Secure</span>
+                </div>
+            </div>
+        </div>
+
+        <a th:href="@{/landingpage}" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

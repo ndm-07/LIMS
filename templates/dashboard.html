@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Insurance Dashboard</title>
+    <style>
+        .navbar { background: #333; color: white; padding: 15px; display: flex; justify-content: space-between; }
+        .card { border: 1px solid #ccc; padding: 20px; margin: 10px; border-radius: 8px; display: inline-block; width: 250px; }
+        .admin-section { border-left: 5px solid red; }
+        .agent-section { border-left: 5px solid green; }
+        .customer-section { border-left: 5px solid blue; }
+        button { cursor: pointer; padding: 10px; margin-top: 10px; width: 100%; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <span>Life Insurance Management System</span>
+    <span>Welcome, <strong th:text="${username}">User</strong> (<span th:text="${role}">Role</span>)</span>
+    <a href="/auth/login" style="color: white;">Logout</a>
+</div>
+
+<div style="padding: 20px;">
+    <h2>Dashboard</h2>
+
+    <div class="card admin-section" th:if="${role == 'ADMIN'}">
+        <h3>Admin Controls</h3>
+        <p>Manage System Users and Global Settings.</p>
+        <button onclick="location.href='/admin/users'">Manage Users</button>
+        <button onclick="location.href='/admin/reports'">System Reports</button>
+    </div>
+
+    <div class="card agent-section" th:if="${role == 'AGENT' or role == 'ADMIN'}">
+        <h3>Agent Portal</h3>
+        <p>Process policies and verify claims.</p>
+        <button onclick="location.href='/agent/new-policy'">Issue New Policy</button>
+        <button onclick="location.href='/agent/claims'">Review Claims</button>
+    </div>
+
+    <div class="card customer-section" th:if="${role == 'CUSTOMER'}">
+        <h3>My Insurance</h3>
+        <p>View your active policies and payments.</p>
+        <button onclick="location.href='/customer/my-policies'">View My Policies</button>
+        <button onclick="location.href='/customer/pay-premium'">Pay Premium</button>
+    </div>
+
+    <div class="card">
+        <h3>Help & Support</h3>
+        <p>Need assistance? Contact us.</p>
+        <button>Contact Support</button>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>LifeShield | Premium Payments</title>-->
+<!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">-->
+<!--    <style>-->
+<!--        :root {-->
+<!--            &#45;&#45;primary: #1a3a5f;-->
+<!--            &#45;&#45;secondary: #2c3e50;-->
+<!--            &#45;&#45;accent: #27ae60;-->
+<!--            &#45;&#45;light: #f4f7f9;-->
+<!--            &#45;&#45;border: #e1e8ed;-->
+<!--            &#45;&#45;white: #ffffff;-->
+<!--        }-->
+
+<!--        body { font-family: 'Segoe UI', sans-serif; background: var(&#45;&#45;light); margin: 0; padding: 20px 5%; }-->
+
+<!--        /* Layout Containers */-->
+<!--        .payment-grid { display: grid; grid-template-columns: 350px 1fr; gap: 30px; margin-top: 30px; }-->
+
+<!--        /* Branding Header */-->
+<!--        .page-header { background: var(&#45;&#45;primary); color: white; padding: 25px 40px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }-->
+
+<!--        /* Make Payment Form Card */-->
+<!--        .payment-card { background: var(&#45;&#45;white); padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); height: fit-content; }-->
+<!--        .payment-card h3 { color: var(&#45;&#45;primary); margin-top: 0; display: flex; align-items: center; gap: 10px; }-->
+
+<!--        .form-group { margin-bottom: 20px; }-->
+<!--        .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: var(&#45;&#45;secondary); text-transform: uppercase; margin-bottom: 8px; }-->
+<!--        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid var(&#45;&#45;border); border-radius: 6px; box-sizing: border-box; font-size: 1rem; }-->
+
+<!--        .btn-pay { width: 100%; background: var(&#45;&#45;accent); color: white; border: none; padding: 15px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem; }-->
+<!--        .btn-pay:hover { background: #219150; transform: translateY(-2px); }-->
+
+<!--        /* Payment History Table */-->
+<!--        .history-card { background: var(&#45;&#45;white); padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); }-->
+<!--        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }-->
+
+<!--        .filter-box { display: flex; gap: 10px; }-->
+<!--        .filter-box input { padding: 8px 15px; border: 1px solid var(&#45;&#45;border); border-radius: 20px; outline: none; }-->
+
+<!--        table { width: 100%; border-collapse: collapse; }-->
+<!--        th { text-align: left; padding: 15px; background: #f8f9fa; color: var(&#45;&#45;secondary); font-size: 0.85rem; text-transform: uppercase; border-bottom: 2px solid var(&#45;&#45;border); }-->
+<!--        td { padding: 15px; border-bottom: 1px solid var(&#45;&#45;border); color: var(&#45;&#45;primary); font-size: 0.95rem; }-->
+
+<!--        .status-pill { padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }-->
+<!--        .status-success { background: #e8f5e9; color: var(&#45;&#45;accent); }-->
+
+<!--        .policy-tag { background: #e1f5fe; color: #0288d1; padding: 2px 8px; border-radius: 4px; font-family: monospace; font-weight: bold; }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="page-header">-->
+<!--    <div>-->
+<!--        <h1 style="margin:0;"><i class="fas fa-credit-card"></i> Payment Center</h1>-->
+<!--        <p style="margin:5px 0 0 0; opacity: 0.8;">Secure Premium Management for LifeShield Policies</p>-->
+<!--    </div>-->
+<!--    <div class="header-actions">-->
+<!--        <a th:href="@{/claims/home}" style="color:white; text-decoration:none; font-weight:600;"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<div class="payment-grid">-->
+<!--    <aside class="payment-card">-->
+<!--        <h3><i class="fas fa-wallet"></i> Pay Premium</h3>-->
+<!--        <form th:action="@{/payments/makePayment}" method="post">-->
+<!--            <div class="form-group">-->
+<!--                <label>Select Policy</label>-->
+<!--                <select name="policyId" required>-->
+<!--                    <option value="">Choose Policy...</option>-->
+<!--                    <option value="101">LS-POL-101 (Life Term)</option>-->
+<!--                    <option value="102">LS-POL-102 (Health Plus)</option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label>Amount ($)</label>-->
+<!--                <input type="number" name="amount" placeholder="0.00" step="0.01" required>-->
+<!--            </div>-->
+<!--            <div class="form-group">-->
+<!--                <label>Payment Method</label>-->
+<!--                <select name="method">-->
+<!--                    <option value="CARD">Credit / Debit Card</option>-->
+<!--                    <option value="NETBANKING">Net Banking</option>-->
+<!--                    <option value="UPI">UPI Transfer</option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <button type="submit" class="btn-pay">Securely Make Payment</button>-->
+<!--        </form>-->
+<!--        <div style="margin-top: 20px; text-align: center; color: var(&#45;&#45;text-muted); font-size: 0.8rem;">-->
+<!--            <i class="fas fa-lock"></i> SSL Encrypted Transaction-->
+<!--        </div>-->
+<!--    </aside>-->
+
+<!--    <main class="history-card">-->
+<!--        <div class="history-header">-->
+<!--            <h3 style="margin:0; color: var(&#45;&#45;primary);">Recent Transactions</h3>-->
+<!--            <div class="filter-box">-->
+<!--                <form th:action="@{/payments/getPaymentsByPolicy}" method="get">-->
+<!--                    <input type="text" name="policyId" placeholder="Filter by Policy ID...">-->
+<!--                    <button type="submit" style="background:none; border:none; cursor:pointer; color:var(&#45;&#45;primary);"><i class="fas fa-search"></i></button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <table>-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th>Transaction ID</th>-->
+<!--                <th>Policy</th>-->
+<!--                <th>Date</th>-->
+<!--                <th>Amount</th>-->
+<!--                <th>Status</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr th:each="payment : ${payments}">-->
+<!--                <td th:text="${'#TXN-' + payment.transactionId}" style="font-weight:600;"></td>-->
+<!--                <td><span class="policy-tag" th:text="${'POL-' + payment.policyId}"></span></td>-->
+<!--                <td th:text="${#temporals.format(payment.paymentDate, 'dd MMM yyyy')}"></td>-->
+<!--                <td th:text="${'$' + #numbers.formatDecimal(payment.amount, 1, 2)}"></td>-->
+<!--                <td><span class="status-pill status-success">Completed</span></td>-->
+<!--            </tr>-->
+<!--            <tr th:if="${#lists.isEmpty(payments)}">-->
+<!--                <td colspan="5" style="text-align:center; padding: 40px; color: var(&#45;&#45;text-muted);">-->
+<!--                    No payment history found.-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </main>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LifeShield | Premium Payments</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a3a5f;
+            --secondary: #2c3e50;
+            --accent: #27ae60;
+            --light: #f4f7f9;
+            --border: #e1e8ed;
+            --white: #ffffff;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background: var(--light); margin: 0; padding: 20px 5%; }
+        .payment-grid { display: grid; grid-template-columns: 350px 1fr; gap: 30px; margin-top: 30px; }
+        .page-header { background: var(--primary); color: white; padding: 25px 40px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .payment-card { background: var(--white); padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); height: fit-content; }
+        .payment-card h3 { color: var(--primary); margin-top: 0; display: flex; align-items: center; gap: 10px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; margin-bottom: 8px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
+        .btn-pay { width: 100%; background: var(--accent); color: white; border: none; padding: 15px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem; }
+        .btn-pay:hover { background: #219150; transform: translateY(-2px); }
+        .history-card { background: var(--white); padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.05); }
+        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .filter-box { display: flex; gap: 10px; }
+        .filter-box input { padding: 8px 15px; border: 1px solid var(--border); border-radius: 20px; outline: none; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 15px; background: #f8f9fa; color: var(--secondary); font-size: 0.85rem; text-transform: uppercase; border-bottom: 2px solid var(--border); }
+        td { padding: 15px; border-bottom: 1px solid var(--border); color: var(--primary); font-size: 0.95rem; }
+
+        /* Dynamic Status Pills */
+        .status-pill { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
+        .status-SUCCESS { background: #e8f5e9; color: var(--accent); }
+        .status-PENDING { background: #fff3e0; color: var(--warning); }
+        .status-FAILED { background: #ffebee; color: var(--danger); }
+
+        .policy-tag { background: #e1f5fe; color: #0288d1; padding: 2px 8px; border-radius: 4px; font-family: monospace; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="page-header">
+    <div>
+        <h1 style="margin:0;"><i class="fas fa-credit-card"></i> Payment Center</h1>
+        <p style="margin:5px 0 0 0; opacity: 0.8;">Secure Premium Management for LifeShield Policies</p>
+    </div>
+    <div class="header-actions">
+        <a th:href="@{/landingpage}" style="color:white; text-decoration:none; font-weight:600;">
+            <i class="fas fa-home"></i> Home
+        </a>
+    </div>
+</div>
+
+<div class="payment-grid">
+    <aside class="payment-card">
+        <h3><i class="fas fa-wallet"></i> Pay Premium</h3>
+        <form th:action="@{/payment/makePayment}" th:object="${newPayment}" method="post">
+            <div class="form-group">
+                <label>Policy ID</label>
+                <input type="number" name="policyId" th:field="*{policyId}" placeholder="Enter Policy ID" required>
+            </div>
+            <div class="form-group">
+                <label>Amount ($)</label>
+                <input type="number" name="paymentAmount" th:field="*{paymentAmount}" placeholder="0.00" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label>Payment Method</label>
+                <select name="method">
+                    <option value="CARD">Credit / Debit Card</option>
+                    <option value="NETBANKING">Net Banking</option>
+                    <option value="UPI">UPI Transfer</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-pay">Securely Make Payment</button>
+        </form>
+        <div style="margin-top: 20px; text-align: center; color: #7f8c8d; font-size: 0.8rem;">
+            <i class="fas fa-lock"></i> SSL Encrypted Transaction
+        </div>
+    </aside>
+
+    <main class="history-card">
+        <div class="history-header">
+            <h3 style="margin:0; color: var(--primary);">Recent Transactions</h3>
+            <div class="filter-box">
+                <form th:action="@{/payment/filter}" method="get">
+                    <input type="text" name="policyId" placeholder="Filter by Policy ID...">
+                    <button type="submit" style="background:none; border:none; cursor:pointer; color:var(--primary);"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Payment ID</th>
+                <th>Policy</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="p : ${payments}">
+                <td th:text="${'#PAY-' + p.paymentId}" style="font-weight:600;"></td>
+                <td><span class="policy-tag" th:text="${'POL-' + p.policyId}"></span></td>
+                <td th:text="${p.paymentDate != null ? #temporals.format(p.paymentDate, 'dd MMM yyyy') : 'Pending'}"></td>
+                <td th:text="${'$' + #numbers.formatDecimal(p.paymentAmount, 1, 2)}"></td>
+                <td>
+                    <span th:class="'status-pill status-' + ${p.paymentStatus}"
+                          th:text="${p.paymentStatus}"></span>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(payments)}">
+                <td colspan="5" style="text-align:center; padding: 40px; color: #7f8c8d;">
+                    No payment history found for this account.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LifeShield | Edit Policy</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a3a5f;
+            --accent: #27ae60;
+            --light: #f4f7f9;
+            --text-gray: #5a6c7f;
+            --border: #e1e8ed;
+            --danger: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            color: var(--primary);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            background: white;
+            border-radius: 12px;
+            padding: 45px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 25px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        header h1 span {
+            color: var(--accent);
+        }
+
+        .subtitle {
+            color: var(--text-gray);
+            margin-top: 8px;
+            font-size: 1rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .full-width { grid-column: span 2; }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select {
+            padding: 14px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--primary);
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        /* Read-only field styling */
+        input[readonly] {
+            background-color: #f8fafc;
+            border-color: var(--border);
+            color: var(--text-gray);
+            cursor: not-allowed;
+        }
+
+        input:focus:not([readonly]), select:focus {
+            border-color: var(--accent);
+            background-color: #fff;
+        }
+
+        .action-footer {
+            grid-column: span 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid var(--light);
+        }
+
+        .btn-save {
+            background-color: var(--accent);
+            color: white;
+            padding: 14px 45px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-save:hover {
+            background-color: #219150;
+        }
+
+        .btn-cancel {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+
+        .btn-cancel:hover {
+            color: var(--danger);
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Update <span>Policy</span></h1>
+        <p class="subtitle">Modifying Record: <strong th:text="${policy.policyNumber}"></strong></p>
+    </header>
+
+    <form th:action="@{/policy/update}" th:object="${policy}" method="POST">
+        <input type="hidden" th:field="*{policyId}">
+
+        <div class="form-grid">
+
+            <div class="input-group full-width">
+                <label>Immutable Policy Number</label>
+                <input type="text" th:field="*{policyNumber}" readonly>
+            </div>
+
+            <div class="input-group">
+                <label>Coverage Adjustment ($)</label>
+                <input type="number" th:field="*{coverageAmount}" step="0.01" required>
+            </div>
+
+            <div class="input-group">
+                <label>Premium Rate ($)</label>
+                <input type="number" th:field="*{premiumAmount}" required>
+            </div>
+
+            <div class="input-group">
+                <label>Contract Term (Years)</label>
+                <input type="number" th:field="*{termYears}" required>
+            </div>
+
+            <div class="input-group">
+                <label>Policy Status</label>
+                <select th:field="*{policyStatus}">
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="LAPSED">LAPSED</option>
+                    <option value="MATURED">MATURED</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Effective Date</label>
+                <input type="date" th:field="*{startDate}" required>
+            </div>
+
+            <div class="input-group">
+                <label>Expiration Date</label>
+                <input type="date" th:field="*{endDate}" required>
+            </div>
+
+            <div class="action-footer">
+                <a th:href="@{/policy/home}" class="btn-cancel">
+                    <i class="fas fa-times"></i> Abort Changes
+                </a>
+                <button type="submit" class="btn-save">Save Changes</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

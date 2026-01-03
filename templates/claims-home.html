@@ -1,0 +1,635 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>LifeShield | Claims Management</title>-->
+<!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">-->
+<!--    <style>-->
+<!--        :root {-->
+<!--            &#45;&#45;primary: #1a3a5f;-->
+<!--            &#45;&#45;accent: #27ae60;-->
+<!--            &#45;&#45;light: #f4f7f9;-->
+<!--            &#45;&#45;border: #e1e8ed;-->
+<!--            &#45;&#45;warning: #f39c12;-->
+<!--            &#45;&#45;danger: #e74c3c;-->
+<!--            &#45;&#45;text-muted: #666;-->
+<!--        }-->
+
+<!--        body {-->
+<!--            font-family: 'Segoe UI', sans-serif;-->
+<!--            background-color: var(&#45;&#45;light);-->
+<!--            margin: 0;-->
+<!--            padding: 40px 5%;-->
+<!--        }-->
+
+<!--        .container {-->
+<!--            max-width: 1100px;-->
+<!--            margin: 0 auto;-->
+<!--            background: white;-->
+<!--            border-radius: 12px;-->
+<!--            box-shadow: 0 10px 25px rgba(0,0,0,0.05);-->
+<!--            overflow: hidden;-->
+<!--        }-->
+
+<!--        .header {-->
+<!--            background: var(&#45;&#45;primary);-->
+<!--            color: white;-->
+<!--            padding: 30px;-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            align-items: center;-->
+<!--        }-->
+
+<!--        .content { padding: 40px; }-->
+
+<!--        /* -&#45;&#45; Submission Form -&#45;&#45; */-->
+<!--        .claim-form-box {-->
+<!--            background: #f8fafc;-->
+<!--            border: 1px solid var(&#45;&#45;border);-->
+<!--            border-radius: 10px;-->
+<!--            padding: 25px;-->
+<!--            margin-bottom: 40px;-->
+<!--        }-->
+
+<!--        .form-grid {-->
+<!--            display: grid;-->
+<!--            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));-->
+<!--            gap: 20px;-->
+<!--        }-->
+
+<!--        .input-group { display: flex; flex-direction: column; gap: 8px; }-->
+<!--        label { font-size: 0.75rem; font-weight: 700; color: var(&#45;&#45;primary); text-transform: uppercase; }-->
+
+<!--        input, select {-->
+<!--            padding: 10px;-->
+<!--            border: 2px solid var(&#45;&#45;border);-->
+<!--            border-radius: 6px;-->
+<!--            font-size: 0.9rem;-->
+<!--        }-->
+
+<!--        .btn-submit {-->
+<!--            background: var(&#45;&#45;accent);-->
+<!--            color: white;-->
+<!--            border: none;-->
+<!--            padding: 12px 25px;-->
+<!--            border-radius: 6px;-->
+<!--            font-weight: 700;-->
+<!--            cursor: pointer;-->
+<!--            transition: 0.3s;-->
+<!--            grid-column: span 1;-->
+<!--        }-->
+
+<!--        .btn-submit:hover { background: #219150; }-->
+
+<!--        /* -&#45;&#45; Table Styling -&#45;&#45; */-->
+<!--        table { width: 100%; border-collapse: collapse; }-->
+<!--        th { text-align: left; padding: 15px; background: #f1f5f9; font-size: 0.75rem; text-transform: uppercase; }-->
+<!--        td { padding: 15px; border-bottom: 1px solid var(&#45;&#45;border); font-size: 0.95rem; }-->
+
+<!--        /* -&#45;&#45; Enum Status Badges -&#45;&#45; */-->
+<!--        .badge {-->
+<!--            padding: 4px 10px;-->
+<!--            border-radius: 4px;-->
+<!--            font-size: 0.75rem;-->
+<!--            font-weight: 800;-->
+<!--        }-->
+<!--        .status-OPEN { background: #fff4e5; color: var(&#45;&#45;warning); }-->
+<!--        .status-APPROVED { background: #e8f5e9; color: var(&#45;&#45;accent); }-->
+<!--        .status-REJECTED { background: #ffebee; color: var(&#45;&#45;danger); }-->
+
+<!--        .adjuster-id { color: var(&#45;&#45;text-muted); font-size: 0.85rem; font-style: italic; }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="container">-->
+<!--    <div class="header">-->
+<!--        <div>-->
+<!--            <h1 style="margin:0;"><i class="fas fa-file-invoice-dollar"></i> Claims Center</h1>-->
+<!--            <p style="margin:5px 0 0 0; opacity: 0.8;">Request settlement and track processing status</p>-->
+<!--        </div>-->
+<!--        <a th:href="@{/landingpage}" style="color: white; text-decoration: none; font-weight: 600;">-->
+<!--            <i class="fas fa-home"></i> Back-->
+<!--        </a>-->
+<!--    </div>-->
+
+<!--    <div class="content">-->
+<!--        <div class="claim-form-box">-->
+<!--            <h3 style="margin-top:0; color: var(&#45;&#45;primary);">File New Claim</h3>-->
+<!--            <form th:action="@{/claims/add}" th:object="${newClaim}" method="POST">-->
+<!--                <div class="form-grid">-->
+<!--                    <div class="input-group">-->
+<!--                        <label>Policy ID</label>-->
+<!--                        <input type="number" th:field="*{policyId}" placeholder="e.g. 1" required>-->
+<!--                    </div>-->
+<!--                    <div class="input-group">-->
+<!--                        <label>Claim Amount ($)</label>-->
+<!--                        <input type="number" step="0.01" th:field="*{claimAmount}" placeholder="0.00" required>-->
+<!--                    </div>-->
+<!--                    <div class="input-group">-->
+<!--                        <label>Date of Event</label>-->
+<!--                        <input type="date" th:field="*{claimDate}" required>-->
+<!--                    </div>-->
+<!--                    <div class="input-group">-->
+<!--                        <label>&nbsp;</label>-->
+<!--                        <button type="submit" class="btn-submit">Submit Claim</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </div>-->
+
+<!--        <h3 style="color: var(&#45;&#45;primary);">Active & Past Claims</h3>-->
+<!--        <table>-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th>Claim ID</th>-->
+<!--                <th>Policy ID</th>-->
+<!--                <th>Settlement Amount</th>-->
+<!--                <th>Date Filed</th>-->
+<!--                <th>Adjuster ID</th>-->
+<!--                <th>Status</th>-->
+<!--                <th>Actions</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr th:each="c : ${claims}">-->
+<!--                <td th:text="${'#CLM-' + c.claimId}" style="font-weight: 700;">#CLM-1</td>-->
+<!--                <td th:text="${c.policyId}">1</td>-->
+<!--                <td th:text="${'$' + #numbers.formatDecimal(c.claimAmount, 1, 2)}">$0.00</td>-->
+<!--                <td th:text="${c.claimDate}">2026-01-01</td>-->
+<!--                <td>-->
+<!--                    <span th:if="${c.adjusterId != null}" class="adjuster-id" th:text="${'EMP-' + c.adjusterId}">EMP-10</span>-->
+<!--                    <span th:if="${c.adjusterId == null}" class="adjuster-id">Unassigned</span>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    <span th:class="'badge status-' + ${c.claimStatus}" th:text="${c.claimStatus}">OPEN</span>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                    <a th:href="@{/claims/view/{id}(id=${c.claimId})}" style="color: var(&#45;&#45;primary);">-->
+<!--                        <i class="fas fa-search-plus"></i> View-->
+<!--                    </a>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
+<!--&lt;!&ndash;<html lang="en" xmlns:th="http://www.thymeleaf.org">&ndash;&gt;-->
+<!--&lt;!&ndash;<head>&ndash;&gt;-->
+<!--&lt;!&ndash;    <meta charset="UTF-8">&ndash;&gt;-->
+<!--&lt;!&ndash;    <title>LifeShield | Claim Management</title>&ndash;&gt;-->
+<!--&lt;!&ndash;</head>&ndash;&gt;-->
+<!--&lt;!&ndash;<body>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<div class="container">&ndash;&gt;-->
+<!--&lt;!&ndash;    <div class="registration-box">&ndash;&gt;-->
+<!--&lt;!&ndash;        <h3><i class="fas fa-plus-circle"></i> Submit New Claim</h3>&ndash;&gt;-->
+<!--&lt;!&ndash;        <form th:action="@{/claims/add}" th:object="${newClaim}" method="POST">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="form-grid">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="input-group">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <label>Policy ID</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <input type="number" th:field="*{policyId}" placeholder="Enter Policy ID" required>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="input-group">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <label>Claim Amount</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <input type="number" step="0.01" th:field="*{claimAmount}" placeholder="0.00" required>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="input-group">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <label>Date of Event</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <input type="date" th:field="*{claimDate}" required>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                <button type="submit" class="btn-submit">Submit Claim</button>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </form>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <h3><i class="fas fa-history"></i> Past Claims</h3>&ndash;&gt;-->
+<!--&lt;!&ndash;    <table>&ndash;&gt;-->
+<!--&lt;!&ndash;        <thead>&ndash;&gt;-->
+<!--&lt;!&ndash;        <tr>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>ID</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Policy ID</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Amount</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Date</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Status</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Adjuster</th>&ndash;&gt;-->
+<!--&lt;!&ndash;        </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;        </thead>&ndash;&gt;-->
+<!--&lt;!&ndash;        <tbody>&ndash;&gt;-->
+<!--&lt;!&ndash;        <tr th:each="c : ${claims}">&ndash;&gt;-->
+<!--&lt;!&ndash;            <td th:text="${c.claimId}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td th:text="${c.policyId}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td th:text="${'$' + #numbers.formatDecimal(c.claimAmount, 1, 2)}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td th:text="${c.claimDate}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <span th:class="'badge status-' + ${c.claimStatus}" th:text="${c.claimStatus}"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;            </td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td th:text="${c.adjusterId != null ? 'ID: ' + c.adjusterId : 'Pending Assignment'}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;        </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;        </tbody>&ndash;&gt;-->
+<!--&lt;!&ndash;    </table>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</body>&ndash;&gt;-->
+<!--&lt;!&ndash;</html>&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
+<!--&lt;!&ndash;<html lang="en" xmlns:th="http://www.thymeleaf.org">&ndash;&gt;-->
+<!--&lt;!&ndash;<head>&ndash;&gt;-->
+<!--&lt;!&ndash;    <meta charset="UTF-8">&ndash;&gt;-->
+<!--&lt;!&ndash;    <title>LifeShield | Claim Management</title>&ndash;&gt;-->
+<!--&lt;!&ndash;    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">&ndash;&gt;-->
+<!--&lt;!&ndash;    <style>&ndash;&gt;-->
+<!--&lt;!&ndash;        :root {&ndash;&gt;-->
+<!--&lt;!&ndash;            &#45;&#45;primary: #1a3a5f;&ndash;&gt;-->
+<!--&lt;!&ndash;            &#45;&#45;accent: #27ae60;&ndash;&gt;-->
+<!--&lt;!&ndash;            &#45;&#45;light: #f4f7f9;&ndash;&gt;-->
+<!--&lt;!&ndash;            &#45;&#45;white: #ffffff;&ndash;&gt;-->
+<!--&lt;!&ndash;            &#45;&#45;text-gray: #5a6c7f;&ndash;&gt;-->
+<!--&lt;!&ndash;            &#45;&#45;border: #e1e8ed;&ndash;&gt;-->
+<!--&lt;!&ndash;            &#45;&#45;warning: #f39c12;&ndash;&gt;-->
+<!--&lt;!&ndash;            &#45;&#45;danger: #e74c3c;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        body {&ndash;&gt;-->
+<!--&lt;!&ndash;            font-family: 'Segoe UI', sans-serif;&ndash;&gt;-->
+<!--&lt;!&ndash;            background-color: var(&#45;&#45;light);&ndash;&gt;-->
+<!--&lt;!&ndash;            color: var(&#45;&#45;primary);&ndash;&gt;-->
+<!--&lt;!&ndash;            margin: 0;&ndash;&gt;-->
+<!--&lt;!&ndash;            padding: 40px 20px;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        .container {&ndash;&gt;-->
+<!--&lt;!&ndash;            max-width: 1000px;&ndash;&gt;-->
+<!--&lt;!&ndash;            margin: 0 auto;&ndash;&gt;-->
+<!--&lt;!&ndash;            background: var(&#45;&#45;white);&ndash;&gt;-->
+<!--&lt;!&ndash;            border-radius: 12px;&ndash;&gt;-->
+<!--&lt;!&ndash;            padding: 40px;&ndash;&gt;-->
+<!--&lt;!&ndash;            box-shadow: 0 4px 20px rgba(0,0,0,0.08);&ndash;&gt;-->
+<!--&lt;!&ndash;            border: 1px solid var(&#45;&#45;border);&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        h3 {&ndash;&gt;-->
+<!--&lt;!&ndash;            display: flex;&ndash;&gt;-->
+<!--&lt;!&ndash;            align-items: center;&ndash;&gt;-->
+<!--&lt;!&ndash;            gap: 10px;&ndash;&gt;-->
+<!--&lt;!&ndash;            font-size: 1.25rem;&ndash;&gt;-->
+<!--&lt;!&ndash;            margin-bottom: 20px;&ndash;&gt;-->
+<!--&lt;!&ndash;            color: var(&#45;&#45;primary);&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        h3 i { color: var(&#45;&#45;accent); }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        /* -&#45;&#45; Submission Form -&#45;&#45; */&ndash;&gt;-->
+<!--&lt;!&ndash;        .registration-box {&ndash;&gt;-->
+<!--&lt;!&ndash;            background: #f8fafc;&ndash;&gt;-->
+<!--&lt;!&ndash;            padding: 25px;&ndash;&gt;-->
+<!--&lt;!&ndash;            border-radius: 10px;&ndash;&gt;-->
+<!--&lt;!&ndash;            border: 1px solid var(&#45;&#45;border);&ndash;&gt;-->
+<!--&lt;!&ndash;            margin-bottom: 40px;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        .form-grid {&ndash;&gt;-->
+<!--&lt;!&ndash;            display: grid;&ndash;&gt;-->
+<!--&lt;!&ndash;            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));&ndash;&gt;-->
+<!--&lt;!&ndash;            gap: 20px;&ndash;&gt;-->
+<!--&lt;!&ndash;            align-items: end;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        .input-group { display: flex; flex-direction: column; gap: 8px; }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        label {&ndash;&gt;-->
+<!--&lt;!&ndash;            font-size: 0.75rem;&ndash;&gt;-->
+<!--&lt;!&ndash;            font-weight: 700;&ndash;&gt;-->
+<!--&lt;!&ndash;            text-transform: uppercase;&ndash;&gt;-->
+<!--&lt;!&ndash;            color: var(&#45;&#45;text-gray);&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        input {&ndash;&gt;-->
+<!--&lt;!&ndash;            padding: 12px;&ndash;&gt;-->
+<!--&lt;!&ndash;            border: 2px solid var(&#45;&#45;border);&ndash;&gt;-->
+<!--&lt;!&ndash;            border-radius: 8px;&ndash;&gt;-->
+<!--&lt;!&ndash;            outline: none;&ndash;&gt;-->
+<!--&lt;!&ndash;            font-size: 0.95rem;&ndash;&gt;-->
+<!--&lt;!&ndash;            transition: 0.3s;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        input:focus { border-color: var(&#45;&#45;accent); background: white; }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        .btn-submit {&ndash;&gt;-->
+<!--&lt;!&ndash;            background: var(&#45;&#45;accent);&ndash;&gt;-->
+<!--&lt;!&ndash;            color: white;&ndash;&gt;-->
+<!--&lt;!&ndash;            padding: 12px;&ndash;&gt;-->
+<!--&lt;!&ndash;            border: none;&ndash;&gt;-->
+<!--&lt;!&ndash;            border-radius: 8px;&ndash;&gt;-->
+<!--&lt;!&ndash;            font-weight: 700;&ndash;&gt;-->
+<!--&lt;!&ndash;            cursor: pointer;&ndash;&gt;-->
+<!--&lt;!&ndash;            transition: 0.3s;&ndash;&gt;-->
+<!--&lt;!&ndash;            font-size: 0.9rem;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        .btn-submit:hover {&ndash;&gt;-->
+<!--&lt;!&ndash;            background: #219150;&ndash;&gt;-->
+<!--&lt;!&ndash;            transform: translateY(-2px);&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        /* -&#45;&#45; Table Styling -&#45;&#45; */&ndash;&gt;-->
+<!--&lt;!&ndash;        table {&ndash;&gt;-->
+<!--&lt;!&ndash;            width: 100%;&ndash;&gt;-->
+<!--&lt;!&ndash;            border-collapse: collapse;&ndash;&gt;-->
+<!--&lt;!&ndash;            margin-top: 10px;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        th {&ndash;&gt;-->
+<!--&lt;!&ndash;            text-align: left;&ndash;&gt;-->
+<!--&lt;!&ndash;            padding: 15px;&ndash;&gt;-->
+<!--&lt;!&ndash;            background: #f1f5f9;&ndash;&gt;-->
+<!--&lt;!&ndash;            font-size: 0.7rem;&ndash;&gt;-->
+<!--&lt;!&ndash;            text-transform: uppercase;&ndash;&gt;-->
+<!--&lt;!&ndash;            letter-spacing: 1px;&ndash;&gt;-->
+<!--&lt;!&ndash;            color: var(&#45;&#45;text-gray);&ndash;&gt;-->
+<!--&lt;!&ndash;            border-bottom: 2px solid var(&#45;&#45;border);&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        td {&ndash;&gt;-->
+<!--&lt;!&ndash;            padding: 15px;&ndash;&gt;-->
+<!--&lt;!&ndash;            border-bottom: 1px solid var(&#45;&#45;border);&ndash;&gt;-->
+<!--&lt;!&ndash;            font-size: 0.95rem;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        tr:hover { background-color: #fcfdfe; }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        /* -&#45;&#45; Status Badges -&#45;&#45; */&ndash;&gt;-->
+<!--&lt;!&ndash;        .badge {&ndash;&gt;-->
+<!--&lt;!&ndash;            padding: 4px 10px;&ndash;&gt;-->
+<!--&lt;!&ndash;            border-radius: 4px;&ndash;&gt;-->
+<!--&lt;!&ndash;            font-size: 0.75rem;&ndash;&gt;-->
+<!--&lt;!&ndash;            font-weight: 800;&ndash;&gt;-->
+<!--&lt;!&ndash;            text-transform: uppercase;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;        .status-OPEN { background: #fff4e5; color: var(&#45;&#45;warning); }&ndash;&gt;-->
+<!--&lt;!&ndash;        .status-APPROVED { background: #e8f5e9; color: var(&#45;&#45;accent); }&ndash;&gt;-->
+<!--&lt;!&ndash;        .status-REJECTED { background: #ffebee; color: var(&#45;&#45;danger); }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        .adjuster-text { color: var(&#45;&#45;text-gray); font-style: italic; font-size: 0.85rem; }&ndash;&gt;-->
+<!--&lt;!&ndash;    </style>&ndash;&gt;-->
+<!--&lt;!&ndash;</head>&ndash;&gt;-->
+<!--&lt;!&ndash;<body>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<div class="container">&ndash;&gt;-->
+<!--&lt;!&ndash;    <div class="registration-box">&ndash;&gt;-->
+<!--&lt;!&ndash;        <h3><i class="fas fa-plus-circle"></i> Submit New Claim</h3>&ndash;&gt;-->
+<!--&lt;!&ndash;        <form th:action="@{/claims/add}" th:object="${newClaim}" method="POST">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="form-grid">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="input-group">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <label>Policy ID</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <input type="number" th:field="*{policyId}" placeholder="Enter Policy ID" required>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="input-group">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <label>Claim Amount</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <input type="number" step="0.01" th:field="*{claimAmount}" placeholder="0.00" required>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="input-group">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <label>Date of Event</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <input type="date" th:field="*{claimDate}" required>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                <button type="submit" class="btn-submit">Submit Claim Request</button>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </form>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <h3><i class="fas fa-history"></i> Past Claims</h3>&ndash;&gt;-->
+<!--&lt;!&ndash;    <table>&ndash;&gt;-->
+<!--&lt;!&ndash;        <thead>&ndash;&gt;-->
+<!--&lt;!&ndash;        <tr>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>ID</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Policy ID</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Amount</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Date</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Status</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>Adjuster</th>&ndash;&gt;-->
+<!--&lt;!&ndash;        </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;        </thead>&ndash;&gt;-->
+<!--&lt;!&ndash;        <tbody>&ndash;&gt;-->
+<!--&lt;!&ndash;        <tr th:each="c : ${claims}">&ndash;&gt;-->
+<!--&lt;!&ndash;            <td th:text="${'#CLM-' + c.claimId}" style="font-weight: 600;"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td th:text="${c.policyId}" style="font-family: monospace; font-weight: 700;"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td th:text="${'$' + #numbers.formatDecimal(c.claimAmount, 1, 2)}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td th:text="${c.claimDate}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <span th:class="'badge status-' + ${c.claimStatus}" th:text="${c.claimStatus}"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;            </td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td class="adjuster-text" th:text="${c.adjusterId != null ? 'ID: ' + c.adjusterId : 'Pending Assignment'}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;        </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;        <tr th:if="${#lists.isEmpty(claims)}">&ndash;&gt;-->
+<!--&lt;!&ndash;            <td colspan="6" style="text-align: center; padding: 30px; color: var(&#45;&#45;text-gray);">&ndash;&gt;-->
+<!--&lt;!&ndash;                No claim records found.&ndash;&gt;-->
+<!--&lt;!&ndash;            </td>&ndash;&gt;-->
+<!--&lt;!&ndash;        </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;        </tbody>&ndash;&gt;-->
+<!--&lt;!&ndash;    </table>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</body>&ndash;&gt;-->
+<!--&lt;!&ndash;</html>&ndash;&gt;-->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LifeShield | Claims Management</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a3a5f;
+            --accent: #27ae60;
+            --light: #f4f7f9;
+            --border: #e1e8ed;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --text-muted: #666;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--light);
+            margin: 0;
+            padding: 40px 5%;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content { padding: 40px; }
+
+        /* --- Submission Form --- */
+        .claim-form-box {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            align-items: end;
+        }
+
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        label { font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; }
+
+        input {
+            padding: 10px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        input:focus { border-color: var(--accent); outline: none; }
+
+        .btn-submit {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-submit:hover { background: #219150; transform: translateY(-1px); }
+
+        /* --- Table Styling --- */
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 15px; background: #f1f5f9; font-size: 0.75rem; text-transform: uppercase; color: var(--primary); }
+        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+
+        /* --- Status Badges --- */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+        .status-OPEN { background: #fff4e5; color: var(--warning); }
+        .status-APPROVED { background: #e8f5e9; color: var(--accent); }
+        .status-REJECTED { background: #ffebee; color: var(--danger); }
+
+        .adjuster-id-text { color: var(--text-muted); font-size: 0.85rem; font-weight: 600; }
+        .unassigned { color: #ccc; font-style: italic; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div>
+            <h1 style="margin:0;"><i class="fas fa-file-invoice-dollar"></i> Claims Center</h1>
+            <p style="margin:5px 0 0 0; opacity: 0.8;">Request settlement and track processing status</p>
+        </div>
+        <a th:href="@{/landingpage}" style="color: white; text-decoration: none; font-weight: 600;">
+            <i class="fas fa-home"></i> Back to Home
+        </a>
+    </div>
+
+    <div class="content">
+        <div class="claim-form-box">
+            <h3 style="margin-top:0; color: var(--primary);"><i class="fas fa-plus-circle" style="color: var(--accent);"></i> File New Claim</h3>
+            <form th:action="@{/claims/add}" th:object="${newClaim}" method="POST">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Policy ID</label>
+                        <input type="number" th:field="*{policyId}" placeholder="e.g. 1" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Claim Amount ($)</label>
+                        <input type="number" step="0.01" th:field="*{claimAmount}" placeholder="0.00" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Date of Event</label>
+                        <input type="date" th:field="*{claimDate}" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Adjuster ID (Optional)</label>
+                        <input type="number" th:field="*{adjusterId}" placeholder="e.g. 2">
+                    </div>
+                    <div class="input-group">
+                        <button type="submit" class="btn-submit">Submit Claim</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <h3 style="color: var(--primary); margin-bottom: 20px;">Active & Past Claims</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Claim ID</th>
+                <th>Policy ID</th>
+                <th>Settlement Amount</th>
+                <th>Date Filed</th>
+                <th>Adjuster</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="c : ${claims}">
+                <td th:text="${'#CLM-' + c.claimId}" style="font-weight: 700; color: var(--primary);">#CLM-1</td>
+                <td th:text="${c.policyId}">1</td>
+                <td th:text="${'$' + #numbers.formatDecimal(c.claimAmount, 1, 2)}">$0.00</td>
+                <td th:text="${c.claimDate}">2026-01-01</td>
+                <td>
+                    <span th:if="${c.adjusterId != null}" class="adjuster-id-text">
+                        <i class="fas fa-user-tie"></i> <span th:text="${'ID: ' + c.adjusterId}"></span>
+                    </span>
+                    <span th:if="${c.adjusterId == null}" class="unassigned">Pending Assignment</span>
+                </td>
+                <td>
+                    <span th:class="'badge status-' + ${c.claimStatus}" th:text="${c.claimStatus}">OPEN</span>
+                </td>
+                <td>
+                    <a th:href="@{/claims/view/{id}(id=${c.claimId})}" style="color: var(--primary); text-decoration: none;">
+                        <i class="fas fa-search-plus"></i> View
+                    </a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(claims)}">
+                <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                    No claims found in the system.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

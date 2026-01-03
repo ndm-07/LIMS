@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeShield | Secure Your Future</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a3a5f;
+            --secondary: #2c3e50;
+            --accent: #27ae60;
+            --light: #f4f7f9;
+            --white: #ffffff;
+            --text-muted: #666;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            background-color: var(--light);
+            color: var(--secondary);
+            line-height: 1.6;
+        }
+
+        /* --- Navbar --- */
+        nav {
+            background: var(--primary);
+            padding: 0.8rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .btn-login {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 22px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-login:hover { background: #219150; transform: translateY(-10px); }
+
+        /* --- Hero Section --- */
+        .hero {
+            background: linear-gradient(rgba(26, 58, 95, 0.85), rgba(26, 58, 95, 0.85)),
+                        url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 450px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero h1 { font-size: 3.2rem; margin-bottom: 15px; font-weight: 700; }
+        .hero p { font-size: 1.25rem; max-width: 700px; opacity: 0.9; font-weight: 300; }
+
+        /* --- Dashboard Grid --- */
+        .container {
+            max-width: 1100px;
+            margin: -60px auto 60px;
+            padding: 0 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 35px 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        .card i { font-size: 2.8rem; color: var(--primary); margin-bottom: 20px; }
+        .card h3 { margin: 10px 0; color: var(--primary); font-size: 1.3rem; }
+        .card p { font-size: 0.95rem; color: var(--text-muted); }
+
+        /* --- Features Section --- */
+        .features {
+            max-width: 1000px;
+            margin: 80px auto;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .features h2 { color: var(--primary); margin-bottom: 40px; font-size: 2.2rem; }
+
+        .feature-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .feature-item { flex: 1; min-width: 200px; }
+        .feature-item i { color: var(--accent); font-size: 2rem; margin-bottom: 15px; }
+        .feature-item p { font-weight: bold; color: var(--secondary); margin-top: 10px; }
+
+        /* --- Footer --- */
+        footer {
+            background: var(--secondary);
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            padding: 3rem 1rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">
+        <span class="fa-stack fa-1x" style="font-size: 0.8em; vertical-align: middle;">
+            <i class="fas fa-shield-alt fa-stack-2x"></i>
+            <i class="fas fa-stethoscope fa-stack-1x" style="color: var(--accent); margin-top: 2px;"></i>
+        </span>
+        <span style="margin-left: 10px;">LifeShield</span>
+    </div>
+
+<!--    <div class="nav-links">-->
+<!--        <a href="#"><i class="fas fa-headset"></i> Support</a>-->
+
+<!--        <span th:if="${session.user == null}" style="display: flex; align-items: center; gap: 20px;">-->
+<!--            <a th:href="@{/test/home}">Register</a>-->
+<!--            <a th:href="@{/auth/login}"><button class="btn-login">Login</button></a>-->
+<!--        </span>-->
+
+<!--        <span th:if="${session.user != null}" style="display: flex; align-items: center; gap: 25px;">-->
+<!--            <a th:href="@{/profile}">-->
+<!--                <i class="fas fa-user-circle" style="font-size: 1.6rem; color: var(&#45;&#45;accent);"></i>-->
+<!--                <span>Hi, <span th:text="${session.user.username}">User</span></span>-->
+<!--            </a>-->
+<!--            <a th:href="@{/logout}" style="color: #ff4d4d; font-weight: bold;">-->
+<!--                Logout <i class="fas fa-sign-out-alt"></i>-->
+<!--            </a>-->
+<!--        </span>-->
+<!--    </div>-->
+
+    <div class="nav-links">
+<!--        <a href="#"><i class="fas fa-headset"></i> Support</a>-->
+        <a th:href="@{/support}"><i class="fas fa-headset"></i> Support</a>
+
+        <span th:if="${session.user == null}" style="display: flex; align-items: center; gap: 20px;">
+        <a th:href="@{/auth/register}">Register</a>
+        <a th:href="@{/auth/login}"><button class="btn-login">Login</button></a>
+    </span>
+
+        <span th:if="${session.user != null}" style="display: flex; align-items: center; gap: 25px;">
+<!--        <a th:href="@{/profile}">-->
+<!--            <i class="fas fa-user-circle" style="font-size: 1.6rem; color: var(&#45;&#45;accent);"></i>-->
+<!--            <span>Hi, <span th:text="${session.user.username}">User</span></span>-->
+<!--        </a>-->
+            <a th:href="@{/profile}">
+                <i class="fas fa-user-circle" style="font-size: 1.6rem; color: var(--accent);"></i>
+                <span>Hi, <span th:text="${session.user.username}">User</span></span>
+            </a>
+        <a th:href="@{/auth/logout}" style="color: #ff4d4d; font-weight: bold;">
+            Logout <i class="fas fa-sign-out-alt"></i>
+        </a>
+    </span>
+    </div>
+
+</nav>
+
+<header class="hero">
+    <h1>Protection for Your Loved Ones</h1>
+    <p>Manage your life insurance policies, track claims, and secure your family's financial future with one integrated platform.</p>
+</header>
+
+<!--<main class="container">-->
+<!--    <div class="grid">-->
+<!--        <a th:href="@{/policyhome/home}" class="card">-->
+<!--            <i class="fas fa-file-contract"></i>-->
+<!--            <h3>Policy Management</h3>-->
+<!--            <p>View active policies, check coverage details, and download terms.</p>-->
+<!--        </a>-->
+
+<!--        <a th:href="@{/beneficiary/home}" class="card">-->
+<!--            <i class="fas fa-users"></i>-->
+<!--            <h3>Beneficiaries</h3>-->
+<!--            <p>Assign and update family members linked to your active plans.</p>-->
+<!--        </a>-->
+
+<!--        <a th:href="@{/claims/home}" class="card">-->
+<!--            <i class="fas fa-hand-holding-heart"></i>-->
+<!--            <h3>Claims Center</h3>-->
+<!--            <p>Submit a new claim or track real-time settlement status.</p>-->
+<!--        </a>-->
+
+<!--        <a th:href="@{/payment/home}" class="card">-->
+<!--            <i class="fas fa-credit-card"></i>-->
+<!--            <h3>Payments</h3>-->
+<!--            <p>Pay premiums securely and view your transaction history.</p>-->
+<!--        </a>-->
+<!--    </div>-->
+<!--</main>-->
+
+<main class="container">
+    <div class="grid">
+        <a th:href="${session.user != null ? '/policy/home' : '/auth/login'}" class="card">
+            <i class="fas fa-file-contract"></i>
+            <h3>Policy Management</h3>
+            <p th:text="${session.user != null ? 'View and manage your active policies.' : 'Please login to manage policies.'}"></p>
+        </a>
+
+        <a th:href="${session.user != null ? '/beneficiary/home' : '/auth/login'}" class="card">
+            <i class="fas fa-users"></i>
+            <h3>Beneficiaries</h3>
+            <p th:text="${session.user != null ? 'Update your policy nominees.' : 'Please login to view beneficiaries.'}"></p>
+        </a>
+
+        <a th:href="${session.user != null ? '/claims/home' : '/auth/login'}" class="card">
+            <i class="fas fa-hand-holding-heart"></i>
+            <h3>Claims Center</h3>
+            <p th:text="${session.user != null ? 'Track your settlement status.' : 'Please login to submit claims.'}"></p>
+        </a>
+
+        <a th:href="${session.user != null ? '/payment/home' : '/auth/login'}" class="card">
+            <i class="fas fa-credit-card"></i>
+            <h3>Payments</h3>
+            <p th:text="${session.user != null ? 'Pay premiums securely online.' : 'Please login to make payments.'}"></p>
+        </a>
+    </div>
+</main>
+
+<section class="features">
+    <h2>Why Choose LifeShield?</h2>
+    <div class="feature-grid">
+        <div class="feature-item">
+            <i class="fas fa-user-check"></i>
+            <p>99.9% Claim Settlement</p>
+        </div>
+        <div class="feature-item">
+            <i class="fas fa-clock"></i>
+            <p>24/7 Priority Support</p>
+        </div>
+        <div class="feature-item">
+            <i class="fas fa-lock"></i>
+            <p>Bank-Grade Encryption</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2025 LifeShield Insurance Management System. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LifeShield | Nexus Control</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a3a5f;
+            --accent: #27ae60;
+            --light: #f4f7f9;
+            --danger: #e74c3c;
+            --text-gray: #5a6c7f;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            color: var(--primary);
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e1e8ed;
+        }
+
+        .logo-area h1 {
+            margin: 0;
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .logo-area span {
+            color: var(--accent);
+        }
+
+        /* New Back Button Styling */
+        .btn-nav-back {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-nav-back:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .tile {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-decoration: none;
+            color: var(--primary);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid #e1e8ed;
+        }
+
+        .tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .tile i {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .tile h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.3rem;
+        }
+
+        .tile p {
+            margin: 0;
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Form Row Tiles */
+        .form-tile {
+            grid-column: span 2;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .input-box {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-box:focus {
+            border-color: var(--accent);
+        }
+
+        .btn-action {
+            padding: 12px 25px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            background: var(--primary);
+            color: white;
+            transition: background 0.3s;
+        }
+
+        .btn-action:hover {
+            background: #2c5282;
+        }
+
+        .btn-delete {
+            background: var(--danger);
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+
+        .danger-border {
+            border-left: 5px solid var(--danger);
+        }
+
+        .error-banner {
+            background-color: #fdeaea;
+            border-left: 5px solid var(--danger);
+            color: var(--danger);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="logo-area">
+            <h1>LifeShield <span>Nexus</span></h1>
+            <p class="subtitle" style="color: var(--text-gray); margin: 0;">Policy Administration Terminal</p>
+        </div>
+
+        <a th:href="@{/landingpage}" class="btn-nav-back">
+            <i class="fas fa-arrow-left"></i> Return to Landing Page
+        </a>
+    </header>
+
+    <div th:if="${error}" class="error-banner">
+        <i class="fas fa-exclamation-circle"></i> <span th:text="${error}">Error message here</span>
+    </div>
+
+    <div class="grid-layout">
+        <a href="/policy/add" class="tile">
+            <i class="fas fa-file-medical"></i>
+            <h3>New Application</h3>
+            <p>Register and initialize a new insurance policy record.</p>
+        </a>
+
+        <a href="/policy/all" class="tile">
+            <i class="fas fa-list-ul"></i>
+            <h3>Global Registry</h3>
+            <p>View and export the complete list of registered policies.</p>
+        </a>
+
+        <a href="/policy/updateform" class="tile">
+            <i class="fas fa-edit"></i>
+            <h3>Modify Records</h3>
+            <p>Select and update existing policy parameters.</p>
+        </a>
+
+        <div class="tile form-tile">
+            <h3><i class="fas fa-search" style="font-size: 1.1rem; display: inline; margin-right: 10px;"></i>Policy Lookup</h3>
+            <form th:action="@{/policy/view-by-number}" method="GET" class="form-content">
+                <input type="text" name="policyNumber" class="input-box" placeholder="Enter Policy Number" required>
+                <button type="submit" class="btn-action">Search</button>
+            </form>
+        </div>
+
+        <div class="tile form-tile danger-border">
+            <h3><i class="fas fa-trash-alt" style="font-size: 1.1rem; display: inline; margin-right: 10px; color: var(--danger);"></i>Decommission Policy</h3>
+            <form th:action="@{/policy/execute-delete}" method="POST" class="form-content">
+                <input type="text" name="policyNumber" class="input-box" placeholder="Enter Policy ID to remove" required>
+                <button type="submit" class="btn-action btn-delete" onclick="return confirm('This action is permanent. Continue?')">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,777 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>LifeShield | Claim Status Details</title>-->
+<!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">-->
+<!--    <style>-->
+<!--        :root {-->
+<!--            &#45;&#45;primary: #1a3a5f;-->
+<!--            &#45;&#45;accent: #27ae60;-->
+<!--            &#45;&#45;light: #f4f7f9;-->
+<!--            &#45;&#45;border: #e1e8ed;-->
+<!--            &#45;&#45;text-muted: #7f8c8d;-->
+<!--        }-->
+
+<!--        body { font-family: 'Segoe UI', sans-serif; background: var(&#45;&#45;light); margin: 0; padding: 40px 5%; }-->
+
+<!--        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }-->
+
+<!--        .header { background: var(&#45;&#45;primary); color: white; padding: 30px; display: flex; justify-content: space-between; align-items: center; }-->
+
+<!--        .content { padding: 40px; }-->
+
+<!--        /* -&#45;&#45; Status Tracker -&#45;&#45; */-->
+<!--        .stepper { display: flex; justify-content: space-between; margin-bottom: 50px; position: relative; }-->
+<!--        .stepper::before { content: ""; position: absolute; top: 20px; left: 10%; right: 10%; height: 2px; background: #ddd; z-index: 1; }-->
+
+<!--        .step { z-index: 2; text-align: center; width: 33%; }-->
+<!--        .step-icon { width: 40px; height: 40px; border-radius: 50%; background: white; border: 2px solid #ddd; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; transition: 0.3s; color: #ddd; }-->
+
+<!--        .step.active .step-icon { border-color: var(&#45;&#45;accent); color: var(&#45;&#45;accent); background: #e8f5e9; }-->
+<!--        .step.completed .step-icon { background: var(&#45;&#45;accent); color: white; border-color: var(&#45;&#45;accent); }-->
+<!--        .step.rejected .step-icon { background: #e74c3c; color: white; border-color: #e74c3c; }-->
+
+<!--        .step-label { font-size: 0.85rem; font-weight: 700; color: var(&#45;&#45;text-muted); }-->
+<!--        .step.active .step-label { color: var(&#45;&#45;primary); }-->
+
+<!--        /* -&#45;&#45; Details Grid -&#45;&#45; */-->
+<!--        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; border-top: 1px solid var(&#45;&#45;border); pt: 30px; margin-top: 20px; padding-top: 30px;}-->
+<!--        .detail-item label { display: block; font-size: 0.75rem; color: var(&#45;&#45;text-muted); text-transform: uppercase; font-weight: 800; margin-bottom: 5px; }-->
+<!--        .detail-item span { font-size: 1.1rem; color: var(&#45;&#45;primary); font-weight: 600; }-->
+
+<!--        .btn-back { background: transparent; border: 2px solid white; color: white; padding: 8px 20px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: 0.3s; }-->
+<!--        .btn-back:hover { background: white; color: var(&#45;&#45;primary); }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="container">-->
+<!--    <div class="header">-->
+<!--        <div>-->
+<!--            <h2 style="margin:0;">Claim #<span th:text="${claim.claimId}"></span></h2>-->
+<!--            <p style="margin:5px 0 0 0; opacity: 0.8;">Full Settlement Overview</p>-->
+<!--        </div>-->
+<!--        <a th:href="@{/claims/home}" class="btn-back"><i class="fas fa-chevron-left"></i> Back</a>-->
+<!--    </div>-->
+
+<!--    <div class="content">-->
+<!--        <div class="stepper">-->
+<!--            <div class="step completed">-->
+<!--                <div class="step-icon"><i class="fas fa-file-import"></i></div>-->
+<!--                <div class="step-label">Submitted</div>-->
+<!--            </div>-->
+
+<!--            <div th:class="${claim.claimStatus == 'OPEN' ? 'step active' : 'step completed'}">-->
+<!--                <div class="step-icon"><i class="fas fa-user-check"></i></div>-->
+<!--                <div class="step-label">Under Review</div>-->
+<!--            </div>-->
+
+<!--            <div th:class="${claim.claimStatus == 'APPROVED' ? 'step completed' : (claim.claimStatus == 'REJECTED' ? 'step rejected' : 'step')}">-->
+<!--                <div class="step-icon">-->
+<!--                    <i th:class="${claim.claimStatus == 'REJECTED' ? 'fas fa-times-circle' : 'fas fa-check-circle'}"></i>-->
+<!--                </div>-->
+<!--                <div class="step-label" th:text="${claim.claimStatus == 'REJECTED' ? 'Rejected' : 'Finalized'}">Finalized</div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="details-grid">-->
+<!--            <div class="detail-item">-->
+<!--                <label>Policy Reference</label>-->
+<!--                <span th:text="${'LS-POL-' + claim.policyId}"></span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--                <label>Requested Amount</label>-->
+<!--                <span th:text="${'$' + #numbers.formatDecimal(claim.claimAmount, 1, 2)}"></span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--                <label>Date of Filing</label>-->
+<!--                <span th:text="${claim.claimDate}"></span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--                <label>Assigned Adjuster</label>-->
+<!--                <span th:text="${claim.adjusterId != null ? 'Adjuster ID: ' + claim.adjusterId : 'Not Assigned Yet'}"></span>-->
+<!--            </div>-->
+<!--            <div class="detail-item">-->
+<!--                <label>Current Status</label>-->
+<!--                <span th:text="${claim.claimStatus}"-->
+<!--                      th:style="${claim.claimStatus == 'APPROVED' ? 'color:#27ae60' : (claim.claimStatus == 'REJECTED' ? 'color:#e74c3c' : 'color:#f39c12')}">-->
+<!--                </span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>LifeShield | Claim Status Details</title>-->
+<!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">-->
+<!--    <style>-->
+<!--        :root {-->
+<!--            &#45;&#45;primary: #1a3a5f;-->
+<!--            &#45;&#45;accent: #27ae60;-->
+<!--            &#45;&#45;light: #f4f7f9;-->
+<!--            &#45;&#45;border: #e1e8ed;-->
+<!--            &#45;&#45;text-muted: #7f8c8d;-->
+<!--            &#45;&#45;danger: #e74c3c;-->
+<!--            &#45;&#45;warning: #f39c12;-->
+<!--        }-->
+
+<!--        body {-->
+<!--            font-family: 'Segoe UI', sans-serif;-->
+<!--            background: var(&#45;&#45;light);-->
+<!--            margin: 0;-->
+<!--            padding: 40px 5%;-->
+<!--        }-->
+
+<!--        .container {-->
+<!--            max-width: 900px;-->
+<!--            margin: 0 auto;-->
+<!--            background: white;-->
+<!--            border-radius: 12px;-->
+<!--            box-shadow: 0 10px 30px rgba(0,0,0,0.1);-->
+<!--            overflow: hidden;-->
+<!--        }-->
+
+<!--        .header {-->
+<!--            background: var(&#45;&#45;primary);-->
+<!--            color: white;-->
+<!--            padding: 30px;-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            align-items: center;-->
+<!--        }-->
+
+<!--        .content { padding: 40px; }-->
+
+<!--        /* -&#45;&#45; Updated Stepper Design -&#45;&#45; */-->
+<!--        .stepper {-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            margin-bottom: 60px;-->
+<!--            position: relative;-->
+<!--        }-->
+
+<!--        /* The connector line */-->
+<!--        .stepper::before {-->
+<!--            content: "";-->
+<!--            position: absolute;-->
+<!--            top: 20px;-->
+<!--            left: 5%;-->
+<!--            right: 5%;-->
+<!--            height: 3px;-->
+<!--            background: #e0e6ed;-->
+<!--            z-index: 1;-->
+<!--        }-->
+
+<!--        .step {-->
+<!--            z-index: 2;-->
+<!--            text-align: center;-->
+<!--            width: 33%;-->
+<!--            position: relative;-->
+<!--        }-->
+
+<!--        .step-icon {-->
+<!--            width: 45px;-->
+<!--            height: 45px;-->
+<!--            border-radius: 50%;-->
+<!--            background: white;-->
+<!--            border: 3px solid #e0e6ed;-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--            justify-content: center;-->
+<!--            margin: 0 auto 12px;-->
+<!--            transition: all 0.4s ease;-->
+<!--            color: #b0bec5;-->
+<!--            font-size: 1.2rem;-->
+<!--        }-->
+
+<!--        /* State Classes */-->
+<!--        .step.completed .step-icon {-->
+<!--            background: var(&#45;&#45;accent);-->
+<!--            color: white;-->
+<!--            border-color: var(&#45;&#45;accent);-->
+<!--            box-shadow: 0 0 15px rgba(39, 174, 96, 0.3);-->
+<!--        }-->
+
+<!--        .step.active .step-icon {-->
+<!--            border-color: var(&#45;&#45;warning);-->
+<!--            color: var(&#45;&#45;warning);-->
+<!--            background: #fff8e1;-->
+<!--            animation: pulse 2s infinite;-->
+<!--        }-->
+
+<!--        .step.rejected .step-icon {-->
+<!--            background: var(&#45;&#45;danger);-->
+<!--            color: white;-->
+<!--            border-color: var(&#45;&#45;danger);-->
+<!--            box-shadow: 0 0 15px rgba(231, 76, 60, 0.3);-->
+<!--        }-->
+
+<!--        .step-label {-->
+<!--            font-size: 0.85rem;-->
+<!--            font-weight: 700;-->
+<!--            color: var(&#45;&#45;text-muted);-->
+<!--            text-transform: uppercase;-->
+<!--            letter-spacing: 0.5px;-->
+<!--        }-->
+
+<!--        .step.completed .step-label, .step.active .step-label { color: var(&#45;&#45;primary); }-->
+<!--        .step.rejected .step-label { color: var(&#45;&#45;danger); }-->
+
+<!--        /* -&#45;&#45; Details Grid -&#45;&#45; */-->
+<!--        .details-card {-->
+<!--            background: #fcfdfe;-->
+<!--            border: 1px solid var(&#45;&#45;border);-->
+<!--            border-radius: 10px;-->
+<!--            padding: 30px;-->
+<!--        }-->
+
+<!--        .details-grid {-->
+<!--            display: grid;-->
+<!--            grid-template-columns: 1fr 1fr;-->
+<!--            gap: 25px;-->
+<!--        }-->
+
+<!--        .detail-item label {-->
+<!--            display: block;-->
+<!--            font-size: 0.7rem;-->
+<!--            color: var(&#45;&#45;text-muted);-->
+<!--            text-transform: uppercase;-->
+<!--            font-weight: 800;-->
+<!--            margin-bottom: 6px;-->
+<!--            letter-spacing: 1px;-->
+<!--        }-->
+
+<!--        .detail-item span {-->
+<!--            font-size: 1.1rem;-->
+<!--            color: var(&#45;&#45;primary);-->
+<!--            font-weight: 600;-->
+<!--        }-->
+
+<!--        .status-text {-->
+<!--            display: inline-flex;-->
+<!--            align-items: center;-->
+<!--            gap: 8px;-->
+<!--            padding: 5px 12px;-->
+<!--            border-radius: 20px;-->
+<!--            font-size: 0.9rem;-->
+<!--            font-weight: 700;-->
+<!--        }-->
+
+<!--        .btn-back {-->
+<!--            background: rgba(255,255,255,0.1);-->
+<!--            border: 1px solid rgba(255,255,255,0.4);-->
+<!--            color: white;-->
+<!--            padding: 10px 20px;-->
+<!--            border-radius: 6px;-->
+<!--            text-decoration: none;-->
+<!--            font-weight: 600;-->
+<!--            transition: 0.3s;-->
+<!--            font-size: 0.9rem;-->
+<!--        }-->
+
+<!--        .btn-back:hover { background: white; color: var(&#45;&#45;primary); }-->
+
+<!--        @keyframes pulse {-->
+<!--            0% { transform: scale(1); }-->
+<!--            50% { transform: scale(1.05); }-->
+<!--            100% { transform: scale(1); }-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="container">-->
+<!--    <div class="header">-->
+<!--        <div>-->
+<!--            <h2 style="margin:0;"><i class="fas fa-shield-alt"></i> Claim #<span th:text="${claim.claimId}"></span></h2>-->
+<!--            <p style="margin:5px 0 0 0; opacity: 0.8;">LifeShield Insurance Management System</p>-->
+<!--        </div>-->
+<!--        <a th:href="@{/claims/home}" class="btn-back">-->
+<!--            <i class="fas fa-arrow-left"></i> Return to Claims-->
+<!--        </a>-->
+<!--    </div>-->
+
+<!--    <div class="content">-->
+<!--        <div class="stepper">-->
+<!--            <div class="step completed">-->
+<!--                <div class="step-icon"><i class="fas fa-file-alt"></i></div>-->
+<!--                <div class="step-label">Submitted</div>-->
+<!--            </div>-->
+
+<!--            <div th:class="${claim.claimStatus.name() == 'OPEN' ? 'step active' : 'step completed'}">-->
+<!--                <div class="step-icon"><i class="fas fa-microscope"></i></div>-->
+<!--                <div class="step-label">Under Review</div>-->
+<!--            </div>-->
+
+<!--            <div th:class="${claim.claimStatus.name() == 'APPROVED' ? 'step completed' :-->
+<!--                           (claim.claimStatus.name() == 'REJECTED' ? 'step rejected' : 'step')}">-->
+<!--                <div class="step-icon">-->
+<!--                    <i th:class="${claim.claimStatus.name() == 'REJECTED' ? 'fas fa-times-circle' : 'fas fa-check-circle'}"></i>-->
+<!--                </div>-->
+<!--                <div class="step-label" th:text="${claim.claimStatus.name() == 'REJECTED' ? 'Rejected' : 'Finalized'}">-->
+<!--                    Finalized-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="details-card">-->
+<!--            <div class="details-grid">-->
+<!--                <div class="detail-item">-->
+<!--                    <label>Policy Reference</label>-->
+<!--                    <span th:text="${'POL-' + claim.policyId}"></span>-->
+<!--                </div>-->
+<!--                <div class="detail-item">-->
+<!--                    <label>Requested Settlement</label>-->
+<!--                    <span th:text="${'$' + #numbers.formatDecimal(claim.claimAmount, 1, 2)}"></span>-->
+<!--                </div>-->
+<!--                <div class="detail-item">-->
+<!--                    <label>Filing Date</label>-->
+<!--                    <span th:text="${#temporals.format(claim.claimDate, 'dd MMMM yyyy')}"></span>-->
+<!--                </div>-->
+<!--                <div class="detail-item">-->
+<!--                    <label>Assigned Adjuster</label>-->
+<!--                    <span th:text="${claim.adjusterId != null ? 'EMP-' + claim.adjusterId : 'Awaiting Assignment'}"></span>-->
+<!--                </div>-->
+<!--                <div class="detail-item" style="grid-column: span 2;">-->
+<!--                    <label>Official Processing Status</label>-->
+<!--                    <div th:class="'status-text ' + ${claim.claimStatus}"-->
+<!--                         th:style="${claim.claimStatus.name() == 'APPROVED' ? 'background:#e8f5e9; color:#27ae60;' :-->
+<!--                                   (claim.claimStatus.name() == 'REJECTED' ? 'background:#ffebee; color:#e74c3c;' :-->
+<!--                                    'background:#fff3e0; color:#f39c12;')}">-->
+<!--                        <i th:class="${claim.claimStatus.name() == 'APPROVED' ? 'fas fa-check-circle' :-->
+<!--                                     (claim.claimStatus.name() == 'REJECTED' ? 'fas fa-times-circle' :-->
+<!--                                      'fas fa-clock')}"></i>-->
+<!--                        <span th:text="${claim.claimStatus}"></span>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>LifeShield | Claim Status Details</title>-->
+<!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">-->
+<!--    <style>-->
+<!--        :root {-->
+<!--            &#45;&#45;primary: #1a3a5f;-->
+<!--            &#45;&#45;accent: #27ae60;-->
+<!--            &#45;&#45;light: #f4f7f9;-->
+<!--            &#45;&#45;border: #e1e8ed;-->
+<!--            &#45;&#45;text-muted: #7f8c8d;-->
+<!--            &#45;&#45;danger: #e74c3c;-->
+<!--            &#45;&#45;warning: #f39c12;-->
+<!--        }-->
+
+<!--        body {-->
+<!--            font-family: 'Segoe UI', sans-serif;-->
+<!--            background: var(&#45;&#45;light);-->
+<!--            margin: 0;-->
+<!--            padding: 40px 5%;-->
+<!--        }-->
+
+<!--        .container {-->
+<!--            max-width: 900px;-->
+<!--            margin: 0 auto;-->
+<!--            background: white;-->
+<!--            border-radius: 12px;-->
+<!--            box-shadow: 0 10px 30px rgba(0,0,0,0.1);-->
+<!--            overflow: hidden;-->
+<!--        }-->
+
+<!--        .header {-->
+<!--            background: var(&#45;&#45;primary);-->
+<!--            color: white;-->
+<!--            padding: 30px;-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            align-items: center;-->
+<!--        }-->
+
+<!--        .content { padding: 40px; }-->
+
+<!--        /* -&#45;&#45; Updated Stepper Design with Progress Line -&#45;&#45; */-->
+<!--        .stepper {-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            margin-bottom: 60px;-->
+<!--            position: relative;-->
+<!--        }-->
+
+<!--        /* The grey background connector line */-->
+<!--        .stepper::before {-->
+<!--            content: "";-->
+<!--            position: absolute;-->
+<!--            top: 20px;-->
+<!--            left: 5%;-->
+<!--            right: 5%;-->
+<!--            height: 3px;-->
+<!--            background: #e0e6ed;-->
+<!--            z-index: 1;-->
+<!--        }-->
+
+<!--        /* The dynamic green progress line */-->
+<!--        .progress-bar-fill {-->
+<!--            position: absolute;-->
+<!--            top: 20px;-->
+<!--            left: 5%;-->
+<!--            height: 3px;-->
+<!--            background: var(&#45;&#45;accent);-->
+<!--            z-index: 1;-->
+<!--            transition: width 0.8s ease;-->
+<!--        }-->
+
+<!--        .step {-->
+<!--            z-index: 2;-->
+<!--            text-align: center;-->
+<!--            width: 33%;-->
+<!--            position: relative;-->
+<!--        }-->
+
+<!--        .step-icon {-->
+<!--            width: 45px;-->
+<!--            height: 45px;-->
+<!--            border-radius: 50%;-->
+<!--            background: white;-->
+<!--            border: 3px solid #e0e6ed;-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--            justify-content: center;-->
+<!--            margin: 0 auto 12px;-->
+<!--            transition: all 0.4s ease;-->
+<!--            color: #b0bec5;-->
+<!--            font-size: 1.2rem;-->
+<!--        }-->
+
+<!--        /* State Classes */-->
+<!--        .step.completed .step-icon {-->
+<!--            background: var(&#45;&#45;accent);-->
+<!--            color: white;-->
+<!--            border-color: var(&#45;&#45;accent);-->
+<!--            box-shadow: 0 0 15px rgba(39, 174, 96, 0.3);-->
+<!--        }-->
+
+<!--        .step.active .step-icon {-->
+<!--            border-color: var(&#45;&#45;warning);-->
+<!--            color: var(&#45;&#45;warning);-->
+<!--            background: #fff8e1;-->
+<!--            animation: pulse 2s infinite;-->
+<!--        }-->
+
+<!--        .step.rejected .step-icon {-->
+<!--            background: var(&#45;&#45;danger);-->
+<!--            color: white;-->
+<!--            border-color: var(&#45;&#45;danger);-->
+<!--            box-shadow: 0 0 15px rgba(231, 76, 60, 0.3);-->
+<!--        }-->
+
+<!--        .step-label {-->
+<!--            font-size: 0.85rem;-->
+<!--            font-weight: 700;-->
+<!--            color: var(&#45;&#45;text-muted);-->
+<!--            text-transform: uppercase;-->
+<!--            letter-spacing: 0.5px;-->
+<!--        }-->
+
+<!--        .step.completed .step-label, .step.active .step-label { color: var(&#45;&#45;primary); }-->
+<!--        .step.rejected .step-label { color: var(&#45;&#45;danger); }-->
+
+<!--        /* -&#45;&#45; Details Grid -&#45;&#45; */-->
+<!--        .details-card {-->
+<!--            background: #fcfdfe;-->
+<!--            border: 1px solid var(&#45;&#45;border);-->
+<!--            border-radius: 10px;-->
+<!--            padding: 30px;-->
+<!--        }-->
+
+<!--        .details-grid {-->
+<!--            display: grid;-->
+<!--            grid-template-columns: 1fr 1fr;-->
+<!--            gap: 25px;-->
+<!--        }-->
+
+<!--        .detail-item label {-->
+<!--            display: block;-->
+<!--            font-size: 0.7rem;-->
+<!--            color: var(&#45;&#45;text-muted);-->
+<!--            text-transform: uppercase;-->
+<!--            font-weight: 800;-->
+<!--            margin-bottom: 6px;-->
+<!--            letter-spacing: 1px;-->
+<!--        }-->
+
+<!--        .detail-item span {-->
+<!--            font-size: 1.1rem;-->
+<!--            color: var(&#45;&#45;primary);-->
+<!--            font-weight: 600;-->
+<!--        }-->
+
+<!--        .status-text {-->
+<!--            display: inline-flex;-->
+<!--            align-items: center;-->
+<!--            gap: 8px;-->
+<!--            padding: 5px 12px;-->
+<!--            border-radius: 20px;-->
+<!--            font-size: 0.9rem;-->
+<!--            font-weight: 700;-->
+<!--        }-->
+
+<!--        .btn-back {-->
+<!--            background: rgba(255,255,255,0.1);-->
+<!--            border: 1px solid rgba(255,255,255,0.4);-->
+<!--            color: white;-->
+<!--            padding: 10px 20px;-->
+<!--            border-radius: 6px;-->
+<!--            text-decoration: none;-->
+<!--            font-weight: 600;-->
+<!--            transition: 0.3s;-->
+<!--            font-size: 0.9rem;-->
+<!--        }-->
+
+<!--        .btn-back:hover { background: white; color: var(&#45;&#45;primary); }-->
+
+<!--        @keyframes pulse {-->
+<!--            0% { transform: scale(1); }-->
+<!--            50% { transform: scale(1.05); }-->
+<!--            100% { transform: scale(1); }-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="container">-->
+<!--    <div class="header">-->
+<!--        <div>-->
+<!--            <h2 style="margin:0;"><i class="fas fa-shield-alt"></i> Claim #<span th:text="${claim.claimId}"></span></h2>-->
+<!--            <p style="margin:5px 0 0 0; opacity: 0.8;">LifeShield Insurance Management System</p>-->
+<!--        </div>-->
+<!--        <a th:href="@{/claims/home}" class="btn-back">-->
+<!--            <i class="fas fa-arrow-left"></i> Return to Claims-->
+<!--        </a>-->
+<!--    </div>-->
+
+<!--    <div class="content">-->
+<!--        <div class="stepper">-->
+<!--            <div class="progress-bar-fill"-->
+<!--                 th:style="${claim.claimStatus.name() == 'OPEN' ? 'width: 45%;' : 'width: 90%;'}">-->
+<!--            </div>-->
+
+<!--            <div class="step completed">-->
+<!--                <div class="step-icon"><i class="fas fa-file-alt"></i></div>-->
+<!--                <div class="step-label">Submitted</div>-->
+<!--            </div>-->
+
+<!--            <div th:class="${claim.claimStatus.name() == 'OPEN' ? 'step active' : 'step completed'}">-->
+<!--                <div class="step-icon"><i class="fas fa-microscope"></i></div>-->
+<!--                <div class="step-label">Under Review</div>-->
+<!--            </div>-->
+
+<!--            <div th:class="${claim.claimStatus.name() == 'APPROVED' ? 'step completed' :-->
+<!--                           (claim.claimStatus.name() == 'REJECTED' ? 'step rejected' : 'step')}">-->
+<!--                <div class="step-icon">-->
+<!--                    <i th:class="${claim.claimStatus.name() == 'REJECTED' ? 'fas fa-times-circle' : 'fas fa-check-circle'}"></i>-->
+<!--                </div>-->
+<!--                <div class="step-label" th:text="${claim.claimStatus.name() == 'REJECTED' ? 'Rejected' : 'Finalized'}">-->
+<!--                    Finalized-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div class="details-card">-->
+<!--            <div class="details-grid">-->
+<!--                <div class="detail-item">-->
+<!--                    <label>Policy Reference</label>-->
+<!--                    <span th:text="${'POL-' + claim.policyId}"></span>-->
+<!--                </div>-->
+<!--                <div class="detail-item">-->
+<!--                    <label>Requested Settlement</label>-->
+<!--                    <span th:text="${'$' + #numbers.formatDecimal(claim.claimAmount, 1, 2)}"></span>-->
+<!--                </div>-->
+<!--                <div class="detail-item">-->
+<!--                    <label>Filing Date</label>-->
+<!--                    <span th:text="${#temporals.format(claim.claimDate, 'dd MMMM yyyy')}"></span>-->
+<!--                </div>-->
+<!--                <div class="detail-item">-->
+<!--                    <label>Assigned Adjuster</label>-->
+<!--                    <span th:text="${claim.adjusterId != null ? 'EMP-' + claim.adjusterId : 'Awaiting Assignment'}"></span>-->
+<!--                </div>-->
+<!--                <div class="detail-item" style="grid-column: span 2;">-->
+<!--                    <label>Official Processing Status</label>-->
+<!--                    <div th:class="'status-text ' + ${claim.claimStatus}"-->
+<!--                         th:style="${claim.claimStatus.name() == 'APPROVED' ? 'background:#e8f5e9; color:#27ae60;' :-->
+<!--                                   (claim.claimStatus.name() == 'REJECTED' ? 'background:#ffebee; color:#e74c3c;' :-->
+<!--                                    'background:#fff3e0; color:#f39c12;')}">-->
+<!--                        <i th:class="${claim.claimStatus.name() == 'APPROVED' ? 'fas fa-check-circle' :-->
+<!--                                     (claim.claimStatus.name() == 'REJECTED' ? 'fas fa-times-circle' :-->
+<!--                                      'fas fa-clock')}"></i>-->
+<!--                        <span th:text="${claim.claimStatus}"></span>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LifeShield | Claim Status Details</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a3a5f;
+            --accent: #27ae60;
+            --light: #f4f7f9;
+            --border: #e1e8ed;
+            --text-muted: #7f8c8d;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background: var(--light); margin: 0; padding: 40px 5%; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; }
+        .header { background: var(--primary); color: white; padding: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .content { padding: 40px; }
+
+        /* --- Stepper Design --- */
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        /* Grey Background Line: Starts at center of first (16.6%) ends at center of last (83.3%) */
+        .stepper::before {
+            content: "";
+            position: absolute;
+            top: 22px;
+            left: 16.6%;
+            width: 66.6%;
+            height: 3px;
+            background: #e0e6ed;
+            z-index: 1;
+        }
+
+        /* Green Progress Line: Starts at 16.6% */
+        .progress-bar-fill {
+            position: absolute;
+            top: 22px;
+            left: 16.6%;
+            height: 3px;
+            background: var(--accent);
+            z-index: 1;
+            transition: width 0.8s ease;
+        }
+
+        .step { z-index: 2; text-align: center; width: 33.33%; position: relative; }
+        .step-icon { width: 45px; height: 45px; border-radius: 50%; background: white; border: 3px solid #e0e6ed; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; transition: all 0.4s ease; color: #b0bec5; font-size: 1.2rem; }
+
+        /* State Classes */
+        .step.completed .step-icon { background: var(--accent); color: white; border-color: var(--accent); }
+        .step.active .step-icon { border-color: var(--warning); color: var(--warning); background: #fff8e1; animation: pulse 2s infinite; }
+        .step.rejected .step-icon { background: var(--danger); color: white; border-color: var(--danger); }
+        .step-label { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .step.completed .step-label, .step.active .step-label { color: var(--primary); }
+        .step.rejected .step-label { color: var(--danger); }
+
+        /* --- Details Grid --- */
+        .details-card { background: #fcfdfe; border: 1px solid var(--border); border-radius: 10px; padding: 30px; }
+        .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        .detail-item label { display: block; font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin-bottom: 6px; }
+        .detail-item span { font-size: 1.1rem; color: var(--primary); font-weight: 600; }
+        .status-text { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: 700; }
+        .btn-back { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.4); color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+        .btn-back:hover { background: white; color: var(--primary); }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div>
+            <h2 style="margin:0;"><i class="fas fa-shield-alt"></i> Claim #<span th:text="${claim.claimId}"></span></h2>
+            <p style="margin:5px 0 0 0; opacity: 0.8;">LifeShield Insurance Management System</p>
+        </div>
+        <a th:href="@{/claims/home}" class="btn-back"><i class="fas fa-arrow-left"></i> Return to Claims</a>
+    </div>
+
+    <div class="content">
+        <div class="stepper">
+            <div class="progress-bar-fill"
+                 th:style="${claim.claimStatus.name() == 'OPEN' ? 'width: 33.33%;' : 'width: 66.66%;'}">
+            </div>
+
+            <div class="step completed">
+                <div class="step-icon"><i class="fas fa-file-alt"></i></div>
+                <div class="step-label">Submitted</div>
+            </div>
+
+            <div th:class="${claim.claimStatus.name() == 'OPEN' ? 'step active' : 'step completed'}">
+                <div class="step-icon"><i class="fas fa-search"></i></div>
+                <div class="step-label">Under Review</div>
+            </div>
+
+            <div th:class="${claim.claimStatus.name() == 'APPROVED' ? 'step completed' : (claim.claimStatus.name() == 'REJECTED' ? 'step rejected' : 'step')}">
+                <div class="step-icon">
+                    <i th:class="${claim.claimStatus.name() == 'REJECTED' ? 'fas fa-times-circle' : 'fas fa-check-circle'}"></i>
+                </div>
+                <div class="step-label" th:text="${claim.claimStatus.name() == 'REJECTED' ? 'Rejected' : 'Finalized'}">Finalized</div>
+            </div>
+        </div>
+
+        <div class="details-card">
+            <div class="details-grid">
+                <div class="detail-item">
+                    <label>Policy Reference</label>
+                    <span th:text="${'POL-' + claim.policyId}"></span>
+                </div>
+                <div class="detail-item">
+                    <label>Requested Settlement</label>
+                    <span th:text="${'$' + #numbers.formatDecimal(claim.claimAmount, 1, 2)}"></span>
+                </div>
+                <div class="detail-item">
+                    <label>Filing Date</label>
+                    <span th:text="${#temporals.format(claim.claimDate, 'dd MMMM yyyy')}"></span>
+                </div>
+                <div class="detail-item">
+                    <label>Assigned Adjuster</label>
+                    <span th:text="${claim.adjusterId != null ? 'EMP-' + claim.adjusterId : 'Awaiting Assignment'}"></span>
+                </div>
+                <div class="detail-item" style="grid-column: span 2;">
+                    <label>Official Processing Status</label>
+                    <div th:class="'status-text ' + ${claim.claimStatus}"
+                         th:style="${claim.claimStatus.name() == 'APPROVED' ? 'background:#e8f5e9; color:#27ae60;' : (claim.claimStatus.name() == 'REJECTED' ? 'background:#ffebee; color:#e74c3c;' : 'background:#fff3e0; color:#f39c12;')}">
+                        <i th:class="${claim.claimStatus.name() == 'APPROVED' ? 'fas fa-check-circle' : (claim.claimStatus.name() == 'REJECTED' ? 'fas fa-times-circle' : 'fas fa-clock')}"></i>
+                        <span th:text="${claim.claimStatus}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,763 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Beneficiary Management</title>-->
+<!--    <style>-->
+<!--        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background-color: #f4f7f9; }-->
+<!--        .container { max-width: 600px; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }-->
+<!--        h2 { color: #1a3a5f; border-bottom: 2px solid #1a3a5f; padding-bottom: 10px; }-->
+<!--        .btn-group { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }-->
+<!--        button {-->
+<!--            padding: 12px; font-size: 16px; cursor: pointer; border: none; border-radius: 5px;-->
+<!--            background-color: #1a3a5f; color: white; transition: 0.3s;-->
+<!--        }-->
+<!--        button:hover { background-color: #2a5a8f; }-->
+<!--        .search-box { border: 1px solid #ccc; padding: 20px; border-radius: 5px; background: #fafafa; margin-top: 20px; }-->
+<!--        input { padding: 10px; width: 70%; border: 1px solid #ddd; border-radius: 4px; }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="container">-->
+<!--    <h2>Beneficiary Management</h2>-->
+
+<!--    <div class="btn-group">-->
+<!--        <a href="/beneficiary/add">-->
+<!--            <button style="width: 100%;">Add New Beneficiary</button>-->
+<!--        </a>-->
+
+<!--        <a href="/beneficiary/list-all">-->
+<!--            <button style="width: 100%; background-color: #7d8ea3;">Update Beneficiary Details</button>-->
+<!--        </a>-->
+
+<!--        <a href="/beneficiary/list-all">-->
+<!--            <button style="width: 100%; background-color: #d9534f;">Delete Beneficiary</button>-->
+<!--        </a>-->
+<!--    </div>-->
+
+<!--    <div class="search-box">-->
+<!--        <p><strong>Find Beneficiaries by Policy</strong></p>-->
+<!--        <form action="/beneficiary/search" method="GET">-->
+<!--            <input type="text" name="policyNumber" placeholder="Enter Policy Number" required>-->
+<!--            <button type="submit" style="padding: 10px;">Search</button>-->
+<!--        </form>-->
+<!--    </div>-->
+
+<!--    <br>-->
+<!--    <a href="/policyhome/home" style="text-decoration: none; color: #666;">Back to Policy Dashboard</a>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>LifeShield | Beneficiary Management</title>-->
+<!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">-->
+<!--    <style>-->
+<!--        :root {-->
+<!--            &#45;&#45;primary: #1a3a5f;-->
+<!--            &#45;&#45;accent: #27ae60;-->
+<!--            &#45;&#45;light: #f4f7f9;-->
+<!--            &#45;&#45;text-gray: #5a6c7f;-->
+<!--            &#45;&#45;border: #e1e8ed;-->
+<!--            &#45;&#45;danger: #e74c3c;-->
+<!--        }-->
+
+<!--        body {-->
+<!--            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;-->
+<!--            background-color: var(&#45;&#45;light);-->
+<!--            color: var(&#45;&#45;primary);-->
+<!--            margin: 0;-->
+<!--            padding: 40px 20px;-->
+<!--        }-->
+
+<!--        .container {-->
+<!--            max-width: 1100px;-->
+<!--            margin: 0 auto;-->
+<!--            background: white;-->
+<!--            border-radius: 12px;-->
+<!--            padding: 40px;-->
+<!--            box-shadow: 0 4px 15px rgba(0,0,0,0.05);-->
+<!--            border: 1px solid var(&#45;&#45;border);-->
+<!--        }-->
+
+<!--        header {-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            align-items: center;-->
+<!--            margin-bottom: 30px;-->
+<!--            border-bottom: 2px solid var(&#45;&#45;light);-->
+<!--            padding-bottom: 20px;-->
+<!--        }-->
+
+<!--        .header-title h1 { margin: 0; font-size: 1.8rem; }-->
+<!--        .header-title h1 span { color: var(&#45;&#45;accent); }-->
+
+<!--        /* Form Styling */-->
+<!--        .beneficiary-form {-->
+<!--            background: #f8fafc;-->
+<!--            padding: 25px;-->
+<!--            border-radius: 10px;-->
+<!--            border: 1px solid var(&#45;&#45;border);-->
+<!--            margin-bottom: 40px;-->
+<!--        }-->
+
+<!--        .form-grid {-->
+<!--            display: grid;-->
+<!--            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));-->
+<!--            gap: 20px;-->
+<!--            align-items: end;-->
+<!--        }-->
+
+<!--        .input-group { display: flex; flex-direction: column; gap: 8px; }-->
+<!--        label { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; }-->
+
+<!--        input, select {-->
+<!--            padding: 12px;-->
+<!--            border: 2px solid var(&#45;&#45;border);-->
+<!--            border-radius: 8px;-->
+<!--            outline: none;-->
+<!--            transition: 0.3s;-->
+<!--        }-->
+
+<!--        input:focus { border-color: var(&#45;&#45;accent); }-->
+
+<!--        /* Table Styling */-->
+<!--        table {-->
+<!--            width: 100%;-->
+<!--            border-collapse: collapse;-->
+<!--            margin-top: 20px;-->
+<!--        }-->
+
+<!--        th {-->
+<!--            text-align: left;-->
+<!--            padding: 15px;-->
+<!--            background: #f1f5f9;-->
+<!--            font-size: 0.75rem;-->
+<!--            text-transform: uppercase;-->
+<!--            letter-spacing: 1px;-->
+<!--            border-bottom: 2px solid var(&#45;&#45;border);-->
+<!--        }-->
+
+<!--        td { padding: 15px; border-bottom: 1px solid var(&#45;&#45;border); }-->
+
+<!--        /* Buttons */-->
+<!--        .btn {-->
+<!--            padding: 10px 20px;-->
+<!--            border-radius: 6px;-->
+<!--            font-weight: 600;-->
+<!--            cursor: pointer;-->
+<!--            text-decoration: none;-->
+<!--            display: inline-flex;-->
+<!--            align-items: center;-->
+<!--            gap: 8px;-->
+<!--            transition: 0.3s;-->
+<!--            border: none;-->
+<!--        }-->
+
+<!--        .btn-add { background: var(&#45;&#45;accent); color: white; }-->
+<!--        .btn-add:hover { background: #219150; }-->
+
+<!--        .btn-edit { color: var(&#45;&#45;primary); border: 1px solid var(&#45;&#45;primary); background: transparent; }-->
+<!--        .btn-edit:hover { background: var(&#45;&#45;primary); color: white; }-->
+
+<!--        .btn-delete { color: var(&#45;&#45;danger); border: 1px solid var(&#45;&#45;danger); background: transparent; }-->
+<!--        .btn-delete:hover { background: var(&#45;&#45;danger); color: white; }-->
+
+<!--        .btn-back { color: var(&#45;&#45;text-gray); font-size: 0.9rem; }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="container">-->
+<!--    <header>-->
+<!--        <div class="header-title">-->
+<!--            <h1>Beneficiary <span>Management</span></h1>-->
+<!--            <p style="color: var(&#45;&#45;text-gray);">Assign and update nominees for your active policies</p>-->
+<!--        </div>-->
+<!--        <a th:href="@{/landingpage}" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>-->
+<!--    </header>-->
+
+<!--    <section class="beneficiary-form">-->
+<!--        <h3 style="margin-top: 0; margin-bottom: 20px; font-size: 1.1rem;">-->
+<!--            <i class="fas fa-user-plus" style="color: var(&#45;&#45;accent);"></i>-->
+<!--            <span th:text="${beneficiary.id == 0 ? 'Register New Beneficiary' : 'Update Beneficiary Details'}">Register New Beneficiary</span>-->
+<!--        </h3>-->
+<!--        <form th:action="${beneficiary.id == 0 ? '/beneficiary/add' : '/beneficiary/update'}" method="POST">-->
+<!--            <input type="hidden" name="id" th:value="${beneficiary.id}">-->
+<!--            <div class="form-grid">-->
+<!--                <div class="input-group">-->
+<!--                    <label>Full Name</label>-->
+<!--                    <input type="text" name="name" th:value="${beneficiary.name}" placeholder="e.g. Jane Doe" required>-->
+<!--                </div>-->
+<!--                <div class="input-group">-->
+<!--                    <label>Relationship</label>-->
+<!--                    <select name="relationship">-->
+<!--                        <option value="WIFE">Wife</option>-->
+<!--                        <option value="HUSBAND">Husband</option>-->
+<!--                        <option value="SON">Son</option>-->
+<!--                        <option value="DAUGHTER">Daughter</option>-->
+<!--                        <option value="FATHER">Father</option>-->
+<!--                        <option value="MOTHER">Mother</option>-->
+<!--                        <option value="OTHER">Other</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--                <div class="input-group">-->
+<!--                    <label>Allocation (%)</label>-->
+<!--                    <input type="number" name="percentage" th:value="${beneficiary.percentage}" placeholder="100" max="100" required>-->
+<!--                </div>-->
+<!--                <div class="input-group">-->
+<!--                    <label>Policy Link</label>-->
+<!--                    <input type="text" name="policyNumber" th:value="${beneficiary.policyNumber}" placeholder="LS-XXXX" required>-->
+<!--                </div>-->
+<!--                <button type="submit" class="btn btn-add">-->
+<!--                    <i class="fas fa-save"></i> Save Beneficiary-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </section>-->
+
+<!--    <section class="beneficiary-list">-->
+<!--        <h3>Current Nominees</h3>-->
+<!--        <table>-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th>Name</th>-->
+<!--                <th>Relationship</th>-->
+<!--                <th>Allocation</th>-->
+<!--                <th>Linked Policy</th>-->
+<!--                <th>Actions</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr th:each="b : ${beneficiaries}">-->
+<!--                <td th:text="${b.name}" style="font-weight: 600;">John Doe</td>-->
+<!--                <td th:text="${b.relationship}">Spouse</td>-->
+<!--                <td th:text="${b.percentage + '%'}">100%</td>-->
+<!--                <td th:text="${b.policyNumber}" style="font-family: monospace;">LS-1001</td>-->
+<!--                <td>-->
+<!--                    <div style="display: flex; gap: 10px;">-->
+<!--                        <a th:href="@{/beneficiary/edit/{id}(id=${b.id})}" class="btn btn-edit"><i class="fas fa-edit"></i> Edit</a>-->
+<!--                        <a th:href="@{/beneficiary/delete/{id}(id=${b.id})}" class="btn btn-delete"-->
+<!--                           onclick="return confirm('Are you sure you want to remove this beneficiary?')">-->
+<!--                            <i class="fas fa-trash"></i> Delete-->
+<!--                        </a>-->
+<!--                    </div>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </section>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>LifeShield | Manage Beneficiaries</title>-->
+<!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">-->
+<!--    <style>-->
+<!--        :root {-->
+<!--            &#45;&#45;primary: #1a3a5f;-->
+<!--            &#45;&#45;accent: #27ae60;-->
+<!--            &#45;&#45;light: #f4f7f9;-->
+<!--            &#45;&#45;text-gray: #5a6c7f;-->
+<!--            &#45;&#45;border: #e1e8ed;-->
+<!--            &#45;&#45;danger: #e74c3c;-->
+<!--        }-->
+
+<!--        body {-->
+<!--            font-family: 'Segoe UI', sans-serif;-->
+<!--            background-color: var(&#45;&#45;light);-->
+<!--            color: var(&#45;&#45;primary);-->
+<!--            margin: 0;-->
+<!--            padding: 40px 20px;-->
+<!--        }-->
+
+<!--        .container {-->
+<!--            max-width: 1000px;-->
+<!--            margin: 0 auto;-->
+<!--            background: white;-->
+<!--            border-radius: 12px;-->
+<!--            padding: 40px;-->
+<!--            box-shadow: 0 4px 15px rgba(0,0,0,0.05);-->
+<!--            border: 1px solid var(&#45;&#45;border);-->
+<!--        }-->
+
+<!--        header {-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            align-items: center;-->
+<!--            margin-bottom: 35px;-->
+<!--            border-bottom: 2px solid var(&#45;&#45;light);-->
+<!--            padding-bottom: 20px;-->
+<!--        }-->
+
+<!--        .header-title h1 { margin: 0; font-size: 1.8rem; color: var(&#45;&#45;primary); }-->
+<!--        .header-title h1 span { color: var(&#45;&#45;accent); }-->
+
+<!--        /* Form Styling */-->
+<!--        .registration-box {-->
+<!--            background: #f8fafc;-->
+<!--            padding: 25px;-->
+<!--            border-radius: 10px;-->
+<!--            border: 1px solid var(&#45;&#45;border);-->
+<!--            margin-bottom: 40px;-->
+<!--        }-->
+
+<!--        .form-grid {-->
+<!--            display: grid;-->
+<!--            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));-->
+<!--            gap: 15px;-->
+<!--            align-items: end;-->
+<!--        }-->
+
+<!--        .input-group { display: flex; flex-direction: column; gap: 8px; }-->
+<!--        label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(&#45;&#45;text-gray); }-->
+
+<!--        input, select {-->
+<!--            padding: 10px 12px;-->
+<!--            border: 2px solid var(&#45;&#45;border);-->
+<!--            border-radius: 6px;-->
+<!--            outline: none;-->
+<!--            font-size: 0.9rem;-->
+<!--        }-->
+
+<!--        input:focus { border-color: var(&#45;&#45;accent); }-->
+
+<!--        /* Table Design */-->
+<!--        .table-wrapper { overflow-x: auto; }-->
+<!--        table { width: 100%; border-collapse: collapse; margin-top: 10px; }-->
+
+<!--        th {-->
+<!--            text-align: left;-->
+<!--            padding: 15px;-->
+<!--            background: #f1f5f9;-->
+<!--            font-size: 0.7rem;-->
+<!--            text-transform: uppercase;-->
+<!--            letter-spacing: 1px;-->
+<!--            color: var(&#45;&#45;text-gray);-->
+<!--            border-bottom: 2px solid var(&#45;&#45;border);-->
+<!--        }-->
+
+<!--        td { padding: 15px; border-bottom: 1px solid var(&#45;&#45;border); font-size: 0.95rem; }-->
+<!--        tr:hover { background-color: #fcfdfe; }-->
+
+<!--        /* Buttons */-->
+<!--        .btn {-->
+<!--            padding: 10px 18px;-->
+<!--            border-radius: 6px;-->
+<!--            font-weight: 600;-->
+<!--            cursor: pointer;-->
+<!--            border: none;-->
+<!--            transition: 0.3s;-->
+<!--            display: inline-flex;-->
+<!--            align-items: center;-->
+<!--            gap: 8px;-->
+<!--            font-size: 0.85rem;-->
+<!--            text-decoration: none;-->
+<!--        }-->
+
+<!--        .btn-primary { background: var(&#45;&#45;accent); color: white; }-->
+<!--        .btn-primary:hover { background: #219150; }-->
+
+<!--        .btn-outline-danger {-->
+<!--            color: var(&#45;&#45;danger);-->
+<!--            border: 1.5px solid var(&#45;&#45;danger);-->
+<!--            background: transparent;-->
+<!--        }-->
+<!--        .btn-outline-danger:hover { background: var(&#45;&#45;danger); color: white; }-->
+
+<!--        .policy-tag {-->
+<!--            background: #e1e8ed;-->
+<!--            padding: 3px 8px;-->
+<!--            border-radius: 4px;-->
+<!--            font-family: monospace;-->
+<!--            font-weight: 700;-->
+<!--            color: var(&#45;&#45;primary);-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="container">-->
+<!--    <header>-->
+<!--        <div class="header-title">-->
+<!--            <h1>Beneficiary <span>Registry</span></h1>-->
+<!--            <p style="color: var(&#45;&#45;text-gray); margin-top: 5px;">Manage share allocations for policy identifiers</p>-->
+<!--        </div>-->
+<!--        <a th:href="@{/landingpage}" style="text-decoration: none; color: var(&#45;&#45;text-gray); font-weight: 600;">-->
+<!--            <i class="fas fa-arrow-left"></i> Dashboard-->
+<!--        </a>-->
+<!--    </header>-->
+
+<!--    <div class="registration-box">-->
+<!--        <form th:action="@{/beneficiary/add}" method="POST">-->
+<!--            <div class="form-grid">-->
+<!--                <div class="input-group">-->
+<!--                    <label>Policy ID</label>-->
+<!--                    <input type="number" name="policyId" placeholder="e.g. 1" required>-->
+<!--                </div>-->
+<!--                <div class="input-group">-->
+<!--                    <label>Full Name</label>-->
+<!--                    <input type="text" name="name" placeholder="Beneficiary Name" required>-->
+<!--                </div>-->
+<!--                <div class="input-group">-->
+<!--                    <label>Relationship</label>-->
+<!--                    <select name="relationship">-->
+<!--                        <option value="Spouse">Spouse</option>-->
+<!--                        <option value="Brother">Brother</option>-->
+<!--                        <option value="Sister">Sister</option>-->
+<!--                        <option value="Child">Child</option>-->
+<!--                        <option value="Parent">Parent</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--                <div class="input-group">-->
+<!--                    <label>Share (%)</label>-->
+<!--                    <input type="number" name="percentageShare" step="0.01" min="0" max="100" placeholder="0.00" required>-->
+<!--                </div>-->
+<!--                <button type="submit" class="btn btn-primary">-->
+<!--                    <i class="fas fa-plus"></i> Add Entry-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+
+<!--    <div class="table-wrapper">-->
+<!--        <table>-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th>B-ID</th>-->
+<!--                <th>Policy ID</th>-->
+<!--                <th>Full Name</th>-->
+<!--                <th>Relationship</th>-->
+<!--                <th>Share Allocation</th>-->
+<!--                <th>Actions</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr th:each="b : ${beneficiaries}">-->
+<!--                <td th:text="${b.beneficiaryId}" style="color: var(&#45;&#45;text-gray);">1</td>-->
+<!--                <td><span class="policy-tag" th:text="${b.policyId}">1</span></td>-->
+<!--                <td th:text="${b.name}" style="font-weight: 600;">Rohit Sharma</td>-->
+<!--                <td th:text="${b.relationship}">Brother</td>-->
+<!--                <td th:text="${b.percentageShare + '%'}">60.00%</td>-->
+<!--                <td>-->
+<!--                    <a th:href="@{/beneficiary/delete/{id}(id=${b.beneficiaryId})}" class="btn btn-outline-danger">-->
+<!--                        <i class="fas fa-trash-alt"></i>-->
+<!--                    </a>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeShield | Manage Beneficiaries</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a3a5f;
+            --accent: #27ae60;
+            --light: #f4f7f9;
+            --white: #ffffff;
+            --text-gray: #5a6c7f;
+            --border: #e1e8ed;
+            --danger: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--light);
+            color: var(--primary);
+            margin: 0;
+            padding: 40px 5%;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 25px;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .header-title h1 span { color: var(--accent); }
+
+        .btn-back {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+
+        .btn-back:hover { color: var(--primary); }
+
+        /* --- Registration Form Section --- */
+        .registration-box {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 50px;
+        }
+
+        .registration-box h3 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            align-items: end;
+        }
+
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+
+        label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-gray);
+            letter-spacing: 0.5px;
+        }
+
+        input, select {
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            font-size: 0.95rem;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent);
+            background: white;
+        }
+
+        .btn-submit {
+            background: var(--accent);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn-submit:hover {
+            background: #219150;
+            transform: translateY(-2px);
+        }
+
+        /* --- Table Section --- */
+        .table-wrapper { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            text-align: left;
+            padding: 18px 15px;
+            background: #f1f5f9;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border);
+        }
+
+        td {
+            padding: 18px 15px;
+            border-bottom: 1px solid var(--border);
+            font-size: 1rem;
+            color: var(--secondary);
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background-color: #fcfdfe; }
+
+        .policy-badge {
+            background: #e1e8ed;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .btn-delete {
+            color: var(--danger);
+            background: rgba(231, 76, 60, 0.1);
+            width: 35px;
+            height: 35px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-gray);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="header-title">
+            <h1>Beneficiary <span>Registry</span></h1>
+            <p style="color: var(--text-gray); margin-top: 5px;">Configure nominee allocations for active policy records</p>
+        </div>
+        <a th:href="@{/landingpage}" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Dashboard
+        </a>
+    </header>
+
+    <div class="registration-box">
+        <h3><i class="fas fa-user-plus" style="color: var(--accent);"></i> Create New Allocation</h3>
+
+        <form th:action="@{/beneficiary/add}" th:object="${newBeneficiary}" method="POST">
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Policy ID</label>
+                    <input type="number" th:field="*{policyId}" placeholder="e.g. 1" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" th:field="*{name}" placeholder="Enter full name" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Relationship</label>
+                    <select th:field="*{relationship}">
+                        <option value="Spouse">Spouse</option>
+                        <option value="Brother">Brother</option>
+                        <option value="Sister">Sister</option>
+                        <option value="Child">Child</option>
+                        <option value="Parent">Parent</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Share (%)</label>
+                    <input type="number" th:field="*{percentageShare}" step="0.01" min="0" max="100" placeholder="0.00" required>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-save"></i> Add Nominee
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>B-ID</th>
+                <th>Linked Policy</th>
+                <th>Beneficiary Name</th>
+                <th>Relationship</th>
+                <th>Percentage Share</th>
+                <th style="text-align: center;">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="b : ${beneficiaries}">
+                <td th:text="${b.beneficiaryId}" style="color: var(--text-gray); font-weight: 600;">1</td>
+                <td><span class="policy-badge" th:text="${'ID-' + b.policyId}">ID-1</span></td>
+                <td th:text="${b.name}" style="font-weight: 600;">Rohit Sharma</td>
+                <td th:text="${b.relationship}">Brother</td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span th:text="${#numbers.formatDecimal(b.percentageShare, 1, 2) + '%'}">60.00%</span>
+                        <div style="width: 60px; height: 6px; background: #eee; border-radius: 3px; overflow: hidden;">
+                            <div th:style="'width:' + ${b.percentageShare} + '%; height: 100%; background: var(--accent);'"></div>
+                        </div>
+                    </div>
+                </td>
+                <td style="display: flex; justify-content: center;">
+                    <a th:href="@{/beneficiary/delete/{id}(id=${b.beneficiaryId})}"
+                       class="btn-delete"
+                       onclick="return confirm('Remove this beneficiary from the policy?')">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </td>
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(beneficiaries)}">
+                <td colspan="6" class="empty-state">
+                    <i class="fas fa-folder-open" style="font-size: 2rem; display: block; margin-bottom: 10px;"></i>
+                    No beneficiaries found in the system.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

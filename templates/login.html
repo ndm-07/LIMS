@@ -1,0 +1,357 @@
+<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
+<!--&lt;!&ndash;<html>&ndash;&gt;-->
+<!--&lt;!&ndash;<head>&ndash;&gt;-->
+<!--&lt;!&ndash;    <title>Login Page</title>&ndash;&gt;-->
+<!--&lt;!&ndash;</head>&ndash;&gt;-->
+<!--&lt;!&ndash;<body>&ndash;&gt;-->
+<!--&lt;!&ndash;<h2>User Login</h2>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<form action="/auth/submit-login" method="POST">&ndash;&gt;-->
+<!--&lt;!&ndash;    <div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <label>Email Address:</label><br>&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="email" name="email" required>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div><br>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <label>Password:</label><br>&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="password" name="password" required>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div><br>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <button type="submit">Login</button>&ndash;&gt;-->
+<!--&lt;!&ndash;    <button><a href="/auth/register">Register</a></button>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</form>&ndash;&gt;-->
+<!--&lt;!&ndash;</body>&ndash;&gt;-->
+<!--&lt;!&ndash;</html>&ndash;&gt;-->
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>LifeShield | Secure Login</title>-->
+<!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">-->
+<!--    <style>-->
+<!--        :root {-->
+<!--            &#45;&#45;primary: #1a3a5f;-->
+<!--            &#45;&#45;accent: #27ae60;-->
+<!--            &#45;&#45;light: #f4f7f9;-->
+<!--            &#45;&#45;white: #ffffff;-->
+<!--            &#45;&#45;secondary: #2c3e50;-->
+<!--        }-->
+
+<!--        body {-->
+<!--            font-family: 'Segoe UI', sans-serif;-->
+<!--            background: linear-gradient(135deg, var(&#45;&#45;primary) 0%, #2c3e50 100%);-->
+<!--            height: 100vh;-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            align-items: center;-->
+<!--            margin: 0;-->
+<!--        }-->
+
+<!--        .login-container {-->
+<!--            background: var(&#45;&#45;white);-->
+<!--            padding: 40px;-->
+<!--            border-radius: 15px;-->
+<!--            box-shadow: 0 15px 35px rgba(0,0,0,0.2);-->
+<!--            width: 100%;-->
+<!--            max-width: 400px;-->
+<!--            text-align: center;-->
+<!--        }-->
+
+<!--        .logo {-->
+<!--            font-size: 2rem;-->
+<!--            font-weight: bold;-->
+<!--            color: var(&#45;&#45;primary);-->
+<!--            margin-bottom: 20px;-->
+<!--            display: inline-block;-->
+<!--        }-->
+
+<!--        h2 {-->
+<!--            color: var(&#45;&#45;secondary);-->
+<!--            margin-bottom: 25px;-->
+<!--            font-weight: 600;-->
+<!--        }-->
+
+<!--        .form-group {-->
+<!--            text-align: left;-->
+<!--            margin-bottom: 20px;-->
+<!--        }-->
+
+<!--        label {-->
+<!--            display: block;-->
+<!--            margin-bottom: 8px;-->
+<!--            font-weight: 500;-->
+<!--            color: var(&#45;&#45;secondary);-->
+<!--        }-->
+
+<!--        input {-->
+<!--            width: 100%;-->
+<!--            padding: 12px;-->
+<!--            border: 1px solid #ddd;-->
+<!--            border-radius: 8px;-->
+<!--            box-sizing: border-box;-->
+<!--            font-size: 1rem;-->
+<!--            transition: 0.3s;-->
+<!--        }-->
+
+<!--        input:focus {-->
+<!--            outline: none;-->
+<!--            border-color: var(&#45;&#45;accent);-->
+<!--            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);-->
+<!--        }-->
+
+<!--        .btn-login {-->
+<!--            background: var(&#45;&#45;accent);-->
+<!--            color: white;-->
+<!--            border: none;-->
+<!--            width: 100%;-->
+<!--            padding: 12px;-->
+<!--            border-radius: 8px;-->
+<!--            font-size: 1rem;-->
+<!--            font-weight: bold;-->
+<!--            cursor: pointer;-->
+<!--            transition: 0.3s;-->
+<!--            margin-top: 10px;-->
+<!--        }-->
+
+<!--        .btn-login:hover {-->
+<!--            background: #219150;-->
+<!--            transform: translateY(-2px);-->
+<!--        }-->
+
+<!--        .register-link {-->
+<!--            margin-top: 20px;-->
+<!--            display: block;-->
+<!--            text-decoration: none;-->
+<!--            color: var(&#45;&#45;primary);-->
+<!--            font-size: 0.9rem;-->
+<!--            font-weight: 500;-->
+<!--        }-->
+
+<!--        .register-link:hover {-->
+<!--            text-decoration: underline;-->
+<!--        }-->
+
+<!--        .error-msg {-->
+<!--            background: #ffe6e6;-->
+<!--            color: #d63031;-->
+<!--            padding: 10px;-->
+<!--            border-radius: 5px;-->
+<!--            margin-bottom: 20px;-->
+<!--            font-size: 0.85rem;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="login-container">-->
+<!--    <div class="logo">-->
+<!--        <i class="fas fa-shield-alt"></i> LifeShield-->
+<!--    </div>-->
+
+<!--    <h2>User Login</h2>-->
+
+<!--    <div th:if="${param.error}" class="error-msg">-->
+<!--        Invalid email or password. Please try again.-->
+<!--    </div>-->
+
+<!--    <form action="/auth/submit-login" method="POST">-->
+<!--        <div class="form-group">-->
+<!--            <label><i class="fas fa-envelope"></i> Email Address:</label>-->
+<!--            <input type="email" name="email" placeholder="Enter your email" required>-->
+<!--        </div>-->
+
+<!--        <div class="form-group">-->
+<!--            <label><i class="fas fa-lock"></i> Password:</label>-->
+<!--            <input type="password" name="password" placeholder="Enter your password" required>-->
+<!--        </div>-->
+
+<!--        <button type="submit" class="btn-login">Login</button>-->
+
+<!--        <a href="/auth/register" class="register-link">Don't have an account? Register here</a>-->
+<!--    </form>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeShield | Secure Login</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a3a5f;
+            --accent: #27ae60;
+            --light: #f4f7f9;
+            --white: #ffffff;
+            --secondary: #2c3e50;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, #2c3e50 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .login-container {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        /* --- Logo Styling --- */
+        .logo-box {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+
+        .fa-stack {
+            font-size: 2.5rem;
+        }
+
+        /* --- Form Styling --- */
+        h2 {
+            color: var(--secondary);
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 1.4rem;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(39, 174, 96, 0.1);
+        }
+
+        .btn-login {
+            background: var(--accent);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-login:hover {
+            background: #219150;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+        }
+
+        .register-link {
+            margin-top: 25px;
+            display: block;
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .register-link:hover {
+            color: var(--accent);
+        }
+
+        .error-msg {
+            background: #fff5f5;
+            color: #e53e3e;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #e53e3e;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <div class="logo-box">
+        <span class="fa-stack">
+            <i class="fas fa-shield-alt fa-stack-2x" style="color: var(--primary);"></i>
+            <i class="fas fa-stethoscope fa-stack-1x" style="color: var(--accent); margin-top: 2px;"></i>
+        </span>
+        <div class="logo-text">LifeShield</div>
+    </div>
+
+    <h2>Secure User Login</h2>
+
+    <div th:if="${param.error}" class="error-msg">
+        <i class="fas fa-exclamation-circle"></i> Invalid email or password.
+    </div>
+
+    <form action="/auth/submit-login" method="POST">
+        <div class="form-group">
+            <label><i class="fas fa-envelope"></i> Email Address</label>
+            <input type="email" name="email" placeholder="e.g. name@example.com" required>
+        </div>
+
+        <div class="form-group">
+            <label><i class="fas fa-lock"></i> Password</label>
+            <input type="password" name="password" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn-login">Login to Dashboard</button>
+
+        <a href="/auth/register" class="register-link">
+            New to LifeShield? Create an Account
+        </a>
+    </form>
+</div>
+
+</body>
+</html>

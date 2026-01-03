@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LifeShield | Policy Details</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a3a5f;
+            --accent: #27ae60;
+            --light: #f4f7f9;
+            --text-gray: #5a6c7f;
+            --border: #e1e8ed;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            color: var(--primary);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--white);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 20px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        header h1 span {
+            color: var(--accent);
+        }
+
+        .subtitle {
+            color: var(--text-gray);
+            margin-top: 5px;
+            font-size: 0.95rem;
+        }
+
+        .data-grid {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .label {
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .status-pill {
+            padding: 5px 14px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: #e8f5e9;
+            color: var(--accent);
+            border: 1px solid #c8e6c9;
+        }
+
+        .error-msg {
+            text-align: center;
+            padding: 20px;
+            color: #e74c3c;
+            background: #fdeaea;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .btn-back {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .btn-back:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Policy <span>Details</span></h1>
+        <p class="subtitle">Official Verification Record</p>
+    </header>
+
+    <div th:if="${policy != null}" class="data-grid">
+        <div class="data-row">
+            <span class="label">System Reference</span>
+            <span class="value" th:text="${policy.policyId}"></span>
+        </div>
+
+        <div class="data-row">
+            <span class="label">Policy Number</span>
+            <span class="value" style="font-family: 'Courier New', monospace; font-weight: 700;" th:text="${policy.policyNumber}"></span>
+        </div>
+
+        <div class="data-row">
+            <span class="label">Coverage Amount</span>
+            <span class="value" th:text="${'$' + #numbers.formatDecimal(policy.coverageAmount, 1, 2)}"></span>
+        </div>
+
+        <div class="data-row">
+            <span class="label">Premium Rate</span>
+            <span class="value" th:text="${'$' + #numbers.formatDecimal(policy.premiumAmount, 1, 2)}"></span>
+        </div>
+
+        <div class="data-row">
+            <span class="label">Status</span>
+            <span class="status-pill" th:text="${policy.policyStatus}"></span>
+        </div>
+    </div>
+
+    <div th:if="${policy == null}" class="error-msg">
+        <i class="fas fa-exclamation-triangle"></i> No records found for the provided identifier.
+    </div>
+
+    <a href="/policy/home" class="btn-back">
+        <i class="fas fa-arrow-left"></i> Return to Dashboard
+    </a>
+</div>
+
+</body>
+</html>

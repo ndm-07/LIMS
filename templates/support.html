@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeShield | Help & Support</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a3a5f;
+            --secondary: #2c3e50;
+            --accent: #27ae60;
+            --light: #f4f7f9;
+            --white: #ffffff;
+            --border: #e1e8ed;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--light); color: var(--secondary); }
+
+        /* --- Simple Nav --- */
+        nav { background: var(--primary); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; color: white; }
+        .logo { font-size: 1.3rem; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        .nav-links a { color: white; text-decoration: none; font-size: 0.9rem; font-weight: 600; }
+
+        /* --- Support Hero --- */
+        .support-hero {
+            background: linear-gradient(rgba(26, 58, 95, 0.9), rgba(26, 58, 95, 0.9));
+            color: white; padding: 60px 20px; text-align: center;
+        }
+        .support-hero h1 { font-size: 2.5rem; margin-bottom: 15px; }
+        .search-bar { max-width: 600px; margin: 20px auto; position: relative; }
+        .search-bar input { width: 100%; padding: 15px 25px; border-radius: 30px; border: none; font-size: 1rem; outline: none; }
+        .search-bar i { position: absolute; right: 20px; top: 15px; color: var(--primary); }
+
+        /* --- Contact Grid --- */
+        .container { max-width: 1100px; margin: -40px auto 60px; padding: 0 20px; }
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+
+        .contact-card {
+            background: var(--white); padding: 30px; border-radius: 12px; text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); transition: 0.3s;
+        }
+        .contact-card:hover { transform: translateY(-5px); }
+        .contact-card i { font-size: 2rem; color: var(--accent); margin-bottom: 15px; }
+        .contact-card h3 { margin-bottom: 10px; color: var(--primary); }
+        .contact-card p { color: #666; font-size: 0.9rem; margin-bottom: 15px; }
+        .btn-outline {
+            padding: 8px 20px; border: 2px solid var(--accent); color: var(--accent);
+            text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 0.85rem;
+        }
+        .btn-outline:hover { background: var(--accent); color: white; }
+
+        /* --- Support Form & FAQ Section --- */
+        .support-section { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; margin-top: 50px; }
+
+        .form-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: bold; font-size: 0.85rem; margin-bottom: 8px; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box;
+        }
+        .btn-submit {
+            background: var(--primary); color: white; border: none; padding: 15px 30px;
+            border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%;
+        }
+
+        .faq-item { margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .faq-item h4 { color: var(--primary); margin-bottom: 8px; cursor: pointer; }
+        .faq-item p { font-size: 0.9rem; color: #555; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">
+        <i class="fas fa-shield-alt"></i> LifeShield Support
+    </div>
+    <div class="nav-links">
+        <a th:href="@{/landingpage}">Back to Home</a>
+    </div>
+</nav>
+
+<header class="support-hero">
+    <h1>How can we help you today?</h1>
+    <div class="search-bar">
+        <input type="text" placeholder="Search for claims, policy updates, or payment help...">
+        <i class="fas fa-search"></i>
+    </div>
+</header>
+
+<main class="container">
+    <div class="contact-grid">
+        <div class="contact-card">
+            <i class="fas fa-phone-alt"></i>
+            <h3>Call Us</h3>
+            <p>Speak with our dedicated support team for urgent policy matters.</p>
+            <p><strong>1-800-LIFESHIELD</strong></p>
+            <a href="tel:18005550199" class="btn-outline">Call Now</a>
+        </div>
+        <div class="contact-card">
+            <i class="fas fa-comments"></i>
+            <h3>Live Chat</h3>
+            <p>Quick answers to your questions via our 24/7 digital assistant.</p>
+            <a href="#" class="btn-outline">Start Chat</a>
+        </div>
+        <div class="contact-card">
+            <i class="fas fa-envelope"></i>
+            <h3>Email Support</h3>
+            <p>Send us your documents or detailed queries for a 24-hour response.</p>
+            <a href="mailto:support@lifeshield.com" class="btn-outline">Send Email</a>
+        </div>
+    </div>
+
+    <div class="support-section">
+        <section class="form-card">
+            <h2 style="color: var(--primary); margin-top:0;">Raise a Support Ticket</h2>
+            <form th:action="@{/support/submit}" method="post">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label>Policy Number (Optional)</label>
+                    <input type="text" name="policyId" placeholder="LS-POL-XXXX">
+                </div>
+                <div class="form-group">
+                    <label>Issue Category</label>
+                    <select name="category">
+                        <option value="payment">Payment & Billing</option>
+                        <option value="claim">Claims Settlement</option>
+                        <option value="policy">Policy Update</option>
+                        <option value="other">Other Technical Issue</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Message</label>
+                    <textarea name="message" rows="5" placeholder="Describe your issue in detail..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Submit Request</button>
+            </form>
+        </section>
+
+        <section>
+            <h2 style="color: var(--primary); margin-top:0;">Quick FAQs</h2>
+            <div class="faq-item">
+                <h4><i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i> How do I track my claim?</h4>
+                <p>Go to the Claims Center and enter your Claim ID for real-time status updates.</p>
+            </div>
+            <div class="faq-item">
+                <h4><i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i> Can I change my beneficiary?</h4>
+                <p>Yes, visit the Beneficiaries tab under your profile to add or update nominees.</p>
+            </div>
+            <div class="faq-item">
+                <h4><i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i> When is my next premium due?</h4>
+                <p>You can view your payment schedule and download invoices in the Payments section.</p>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer style="background: var(--secondary); color: white; text-align: center; padding: 2rem; font-size: 0.9rem;">
+    &copy; 2026 LifeShield Support Portal. All Rights Reserved.
+</footer>
+
+</body>
+</html>
